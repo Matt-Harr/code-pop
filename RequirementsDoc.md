@@ -294,4 +294,9 @@ The application should integrate with social media platforms to enhance user eng
 - *(S)* As a user, I want the platform to be accessible according to WCAG standards of at least an “A”. 
 - *(S)* As a user, I want a place I can lodge complaints and get helpful feedback.
 
+**Use Case Diagrams**
 
+![User](misc/UserUseCaseDiagram.png)
+![Non Account User](misc/NonAccountUserUseCaseDiagram.png)
+![Manager](misc/ManagerUseCaseDiagram.png)
+![Admin](misc/AdminUseCaseDiagram.png)
