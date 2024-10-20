@@ -16,8 +16,8 @@ class PreferenceTests(TestCase):
         self.token2 = Token.objects.create(user=self.user2)
 
         # Create preferences for both users
-        Preference.objects.create(UserID=self.user1, Preference="Mango")
-        Preference.objects.create(UserID=self.user2, Preference="Peach")
+        Preference.objects.create(UserID=self.user1, Preference="mango")
+        Preference.objects.create(UserID=self.user2, Preference="peach")
 
         # Set up the API client
         self.client = APIClient()
@@ -41,7 +41,7 @@ class PreferenceTests(TestCase):
 
         # Check that the preference belongs to user1 and is "Mango"
         self.assertEqual(response.data[0]['UserID'], self.user1.id)
-        self.assertEqual(response.data[0]['Preference'], "Mango")
+        self.assertEqual(response.data[0]['Preference'], "mango")
 
     def test_get_preferences_for_user2(self):
         # Use token authentication for user2
@@ -58,7 +58,7 @@ class PreferenceTests(TestCase):
 
         # Check that the preference belongs to user2 and is "Peach"
         self.assertEqual(response.data[0]['UserID'], self.user2.id)
-        self.assertEqual(response.data[0]['Preference'], "Peach")
+        self.assertEqual(response.data[0]['Preference'], "peach")
 
     def test_get_preferences_for_non_existent_user(self):
         # Use token authentication for user1
@@ -86,7 +86,7 @@ class PreferenceTests(TestCase):
         self.assertEqual(Preference.objects.filter(UserID=self.user1).count(), 2)  # Two preferences for user1
         self.assertEqual(
             list(Preference.objects.filter(UserID=self.user1).values_list('Preference', flat=True)),
-            ["Mango", "Strawberry"]
+            ["mango", "strawberry"]
         )
 
     def test_delete_preference(self):
@@ -114,5 +114,20 @@ class PreferenceTests(TestCase):
         # Confirm that only Strawberry is left in the User1 preference database
         self.assertEqual(
             list(Preference.objects.filter(UserID=self.user1).values_list('Preference', flat=True)),
-            ["Strawberry"]
+            ["strawberry"]
         )
+
+    def test_create_preference_with_invalid_value(self):
+        # Authenticate the user (user1 in this case)
+        self.authenticate(self.token1.key)
+
+        # Send a POST request with an invalid preference value
+        data = {'UserID': self.user1.id, 'Preference': "Mountain Dew"}  # Invalid value (should be "Mtn. Dew")
+        response = self.client.post('/backend/preferences/', data, format='json')
+
+        # Check that the response status code is 400 Bad Request
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # Check that the correct error message is returned (ensure the invalid value is mentioned)
+        self.assertIn("mountain dew is not a valid preference", str(response.data))
+
