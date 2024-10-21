@@ -8,7 +8,7 @@ const App = () => {
   const [message, setMessage] = useState('');
 
   // Single variable to store the base URL
-  const BASE_URL = 'http://172.20.5.200:8000'; // Replace with your actual backend URL
+  const BASE_URL = 'http://192.168.1.22:8000'; // Replace with your actual backend URL
 
   const handleRegister = async () => {
     try {
