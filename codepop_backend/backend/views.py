@@ -199,6 +199,22 @@ class OrderOperations(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
+    def patch(self, request, *args, **kwargs):
+        order = self.get_object()
+        drinks_to_add = request.data.get("AddDrinks", [])
+        drinks_to_remove = request.data.get("RemoveDrinks", [])
+        
+        # Adding drinks
+        if drinks_to_add:
+            order.add_drinks(drinks_to_add)
+
+        # Removing drinks
+        if drinks_to_remove:
+            order.remove_drinks(drinks_to_remove)
+        
+        serializer = self.get_serializer(order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
     def get_permissions(self):
         """Only authenticated users can create, update, or delete orders."""
         if self.action in ['create', 'update', 'destroy']:
@@ -213,3 +229,19 @@ class OrderOperations(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
+
+class UserOrdersLookup(ListCreateAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """Filter orders based on the user ID from the URL."""
+        user_id = self.kwargs['user_id']
+        user = get_object_or_404(User, pk=user_id)
+        return Order.objects.filter(UserID=user)
+
+    def perform_create(self, serializer):
+        """Associate the new order with the correct user."""
+        user_id = self.kwargs['user_id']
+        user = get_object_or_404(User, pk=user_id)
+        serializer.save(UserID=user)

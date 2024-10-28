@@ -4,7 +4,7 @@ from .views import CreateUserAPIView, LogoutUserAPIView, CustomAuthToken
 from .views import UserPreferenceLookup, PreferencesOperations
 from .views import DrinkOperations, UserDrinksLookup
 from .views import InventoryListAPIView, InventoryReportAPIView, InventoryUpdateAPIView
-from .views import OrderOperations
+from .views import OrderOperations, UserOrdersLookup
 
 
 #this ensures that the url calls the right function from the views for each type of request
@@ -69,7 +69,28 @@ urlpatterns = [
     path('inventory/report/', InventoryReportAPIView.as_view(), name='inventory_report'),
     path('inventory/<int:pk>/', InventoryUpdateAPIView.as_view(), name='inventory_update'),
 
+    #Order URLs
 
+    # Endpoint to list all orders or create a new order.
+    # - GET: Retrieve a list of all orders.
+    # - POST: Create a new order. Requires authentication and order details in the request body.
     path('orders/', order_list, name='order_list_create'),
+
+    # Endpoint to retrieve, update, or delete a specific order by its primary key (ID).
+    # - GET: Retrieve details of a specific order.
+    # - PATCH: Update the specific order (e.g., adding drinks).
+    # - DELETE: Remove the specific order from the database.
     path('orders/<int:pk>/', order_detail, name='order_detail'),
+
+    # Retrieve Orders by UserID
+
+    # Endpoint to list all orders for a specific user identified by their user ID.
+    # - GET: Retrieve a list of orders for the specified user.
+    # - POST: Create a new order for the specified user. Requires authentication and order details.
+    path('users/<int:user_id>/orders/', UserOrdersLookup.as_view(), name='user_orders_list_create'),
+
+    # Endpoint to retrieve a specific order by its ID for a specific user.
+    # - GET: Retrieve details of a specific order belonging to the specified user.
+    # - DELETE: Remove the specific order from the database for the specified user.
+    path('users/<int:user_id>/orders/<int:pk>/', order_detail, name='user_order_detail'),
 ]
