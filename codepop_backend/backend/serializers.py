@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Preference, Drink, Inventory, Notification
+from .models import Preference, Drink, Inventory, Order, Notification
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -95,3 +95,25 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = '__all__'
+
+class OrderSerializer(serializers.ModelSerializer):
+    Drinks = serializers.PrimaryKeyRelatedField(many=True, queryset=Drink.objects.all())
+
+    class Meta:
+        model = Order
+        fields = [
+            'OrderID', 'UserID', 'Drinks', 
+            'OrderStatus', 'PaymentStatus', 
+            'PickupTime', 'CreationTime'
+        ]
+
+    def create(self, validated_data):
+            drinks = validated_data.pop('Drinks')
+            order = Order.objects.create(**validated_data)  # Create the order without drinks
+            order.Drinks.set(drinks)  # Set the ManyToMany relationship
+            return order
+
+    def validate_Drinks(self, value):
+        if not value:
+            raise serializers.ValidationError("At least one drink must be included in the order.")
+        return value

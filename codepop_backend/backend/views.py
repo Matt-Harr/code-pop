@@ -11,8 +11,8 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import status, viewsets
 from rest_framework.views import APIView
-from .models import Preference, Drink, Inventory, Notification
-from .serializers import CreateUserSerializer, PreferenceSerializer, DrinkSerializer, InventorySerializer, NotificationSerializer
+from .models import Preference, Drink, Inventory, Notification, Order
+from .serializers import CreateUserSerializer, PreferenceSerializer, DrinkSerializer, InventorySerializer, NotificationSerializer, OrderSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from django.utils.dateparse import parse_datetime
@@ -198,7 +198,7 @@ class InventoryUpdateAPIView(RetrieveUpdateAPIView):
             response_data['warning'] = warning
 
         return Response(response_data, status=status.HTTP_200_OK)
-    
+
 class NotificationOperations(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
@@ -275,3 +275,54 @@ class UserNotificationLookup(ListAPIView):
         # Check if the user exists first, and raise a 404 if not
         user = get_object_or_404(User, pk=user_id)
         return Notification.objects.filter(UserID=user_id)
+
+class OrderOperations(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def patch(self, request, *args, **kwargs):
+        order = self.get_object()
+        drinks_to_add = request.data.get("AddDrinks", [])
+        drinks_to_remove = request.data.get("RemoveDrinks", [])
+        
+        # Adding drinks
+        if drinks_to_add:
+            order.add_drinks(drinks_to_add)
+
+        # Removing drinks
+        if drinks_to_remove:
+            order.remove_drinks(drinks_to_remove)
+        
+        serializer = self.get_serializer(order)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
+    def get_permissions(self):
+        """Only authenticated users can create, update, or delete orders."""
+        if self.action in ['create', 'update', 'destroy']:
+            return [IsAuthenticated()]
+        return super().get_permissions()
+
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
+class UserOrdersLookup(ListCreateAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """Filter orders based on the user ID from the URL."""
+        user_id = self.kwargs['user_id']
+        user = get_object_or_404(User, pk=user_id)
+        return Order.objects.filter(UserID=user)
+
+    def perform_create(self, serializer):
+        """Associate the new order with the correct user."""
+        user_id = self.kwargs['user_id']
+        user = get_object_or_404(User, pk=user_id)
+        serializer.save(UserID=user)
