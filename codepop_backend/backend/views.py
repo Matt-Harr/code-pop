@@ -11,8 +11,18 @@ from rest_framework.views import APIView
 from .models import Preference
 from .serializers import CreateUserSerializer, PreferenceSerializer
 from rest_framework.permissions import IsAuthenticated
+import stripe
+from django.conf import settings
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
-#Custom login to so that it get's a token but also the user's first name and the user id
+from django.views import View #maybe delete these three?
+from django.utils.decorators import method_decorator
+import json
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+#Custom login to so that it gets a token but also the user's first name and the user id
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data, context={'request': request})
@@ -74,3 +84,27 @@ class UserPreferenceListAPIView(ListAPIView):
         # Check if the user exists first, and raise a 404 if not
         user = get_object_or_404(User, pk=user_id)
         return Preference.objects.filter(UserID=user_id)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class StripePaymentIntentView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            # Parse the incoming JSON request body
+            data = json.loads(request.body)
+            amount = int(data.get("amount") * 100)  # Stripe uses cents, so multiply dollars by 100
+
+            if amount is None:
+                return JsonResponse({'error': 'Amount is required.'}, status=400)
+
+            # Create a payment intent with the specified amount
+            intent = stripe.PaymentIntent.create(
+                amount=amount,
+                currency='usd',  # Set currency
+                payment_method_types=['card']  # Accept only card payments
+            )
+
+            # Send the client secret back to the frontend to complete payment
+            return JsonResponse({'clientSecret': intent['client_secret']})
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
