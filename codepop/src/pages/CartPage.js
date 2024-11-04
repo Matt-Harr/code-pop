@@ -26,7 +26,6 @@ const CartPage = () => {
   }, []));
 
   useEffect(() => {
-    console.log(Math.round(totalPrice*100));
     initializePaymentSheet(); // Initialize payment sheet on page load
   }, [totalPrice]);
 
