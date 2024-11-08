@@ -56,13 +56,6 @@ order_detail = OrderOperations.as_view({
     'delete': 'destroy'
 })
 
-generate_gen_drink = GenerateAIDrink.as_view({
-    'get': 'generateGeneralUser',
-})
-
-generate_acc_drink = GenerateAIDrink.as_view({
-    'get': 'generateAccountUser',
-})
 
 urlpatterns = [
     # Authentication related URLs
@@ -175,7 +168,10 @@ urlpatterns = [
     # Endpoint to call the drinkAI when the generate drink button is clicked
     # One for account users and one for general users
     # - GET: Retrive generated-drink information the AI sends back
-    path('generate/<int:user_id>/', generate_acc_drink, name='account_ai_drink'),
-    path('generate/', generate_gen_drink, name='general_ai_drink'),
+    # For account users: expects a user_id to be provided
+    path('generate/<int:user_id>/', GenerateAIDrink.as_view(), name='account_ai_drink'),
+    
+    # For general users: no user_id provided
+    path('generate/', GenerateAIDrink.as_view(), name='general_ai_drink'),
 
 ]

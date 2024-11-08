@@ -373,81 +373,48 @@ class StripePaymentIntentView(View):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
 
-class GenerateAIDrink(viewsets.ModelViewSet): # Chatgpt had APIView
-    # ChatGPT solution, didnt seem to work though
-    # def get(self, request, user_id=None): # default value None if user isn't logged in
-    #     try:
-    #         if user_id:
-    #             # Generate AI drink for an account user (uses user preferences)
-    #             user = get_object_or_404(User, pk=user_id)
-    #             print(user)
-    #             preferences = Preference.objects.filter(UserID=user)
-    #             print(preferences)
-    #             if not preferences: # user has no preferences listed
-    #                 preferences = ["mango", "peach", "vanilla", "salted caramel", "orange", "lavender", "peppermint", "blue raspberry"]
-            
-    #             result = generate_soda(preferences)
-    #             return JsonResponse({
-    #                 'SyrupsUsed': result["syrups"],
-    #                 'SodaUsed': result["soda"][0],
-    #                 'AddIns': [],
-    #                 'Size': "medium",
-    #                 'Ice': "medium",
-    #                 "UserCreated": False,
-    #             })
-    #         else:
-    #             # Generate AI drink for a general user (uses hardcoded preferences)
-    #             print("check 3")
-    #             preferences = ["mango", "peach", "vanilla", "salted caramel", "orange", "lavender", "peppermint", "blue raspberry"]
-    #             result = generate_soda(preferences)
-    #             print("check 4")
-    #             return JsonResponse({
-    #                 'SyrupsUsed': result["syrups"],
-    #                 'SodaUsed': result["soda"][0],
-    #                 'AddIns': [],
-    #                 'Size': "medium",
-    #                 'Ice': "medium",
-    #                 "UserCreated": False,
-    #             })
-    #     except Exception as e:
-    #         return JsonResponse({'error': str(e)}, status=400)
+class GenerateAIDrink(APIView):
+    permission_classes = [AllowAny]
 
-    # Generate AI drink for an account user (uses user preferences)
-    def generateAccountUser(self, user_id):
+    def get(self, request, user_id=None):
         try:
-            user = get_object_or_404(User, pk=user_id)
-            print(user)
-            preferences = Preference.objects.filter(UserID=user)
-            print(preferences)
-            if not preferences: # user has no preferences listed
-                preferences = ["mango", "peach", "vanilla", "salted caramel", "orange", "lavender", "peppermint", "blue raspberry"]
-           
-            result = generate_soda(preferences)
-            return JsonResponse({
-                'SyrupsUsed': result["syrups"],
-                'SodaUsed': result["soda"][0],
-                'AddIns': [],
-                'Size': "medium",
-                'Ice': "medium",
-                "UserCreated": False,
-            })
+            if user_id:
+                # Generate drink for account user
+                response_data = self.generate_account_user(user_id)
+            else:
+                # Generate drink for general user
+                response_data = self.generate_general_user()
+            return Response(response_data)
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
+            return Response({'error': str(e)}, status=400)
+    
+    def generate_account_user(self, user_id):
+        """Generate AI drink for a registered user using their preferences."""
+        user = get_object_or_404(User, pk=user_id)
+        preferences = Preference.objects.filter(UserID=user)
+        
+        # Default to hardcoded preferences if user has none
+        preferences_list = (
+            [pref.name for pref in preferences]
+            if preferences.exists()
+            else ["mango", "peach", "vanilla", "salted caramel", "orange", "lavender", "peppermint", "blue raspberry"]
+        )
 
-    # Generate AI drink for a general user (uses hardcoded preferences)
-    def generateGeneralUser(self):
-        try:
-            print("check 3")
-            preferences = ["mango", "peach", "vanilla", "salted caramel", "orange", "lavender", "peppermint", "blue raspberry"]
-            result = generate_soda(preferences)
-            print("check 4")
-            return JsonResponse({
-                'SyrupsUsed': result["syrups"],
-                'SodaUsed': result["soda"][0],
-                'AddIns': [],
-                'Size': "medium",
-                'Ice': "medium",
-                "UserCreated": False,
-            })
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
+        return self.generate_response_data(preferences_list, user_created=True)
+
+    def generate_general_user(self):
+        """Generate AI drink for a general user with hardcoded preferences."""
+        preferences = ["mango", "peach", "vanilla", "salted caramel", "orange", "lavender", "peppermint", "blue raspberry"]
+        return self.generate_response_data(preferences, user_created=False)
+
+    def generate_response_data(self, preferences, user_created):
+        """Helper function to generate response data."""
+        result = generate_soda(preferences)
+        return {
+            'SyrupsUsed': result["syrups"],
+            'SodaUsed': result["soda"][0],
+            'AddIns': [],
+            'Size': "24oz",
+            'Ice': "regular",
+            "UserCreated": user_created,
+        }

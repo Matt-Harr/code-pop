@@ -88,7 +88,8 @@ const GeneralHomePage = () => {
 
   // Generate drinks button press
   const generateDrinks = () => {
-    console.log('generating drinks...')
+    console.log('generating drinks...');
+    navigation.navigate('CreateDrink', {fromGenerateButton: true} );
   }
 
   return (

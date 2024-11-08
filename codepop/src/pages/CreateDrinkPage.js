@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import NavBar from '../components/NavBar';
 import DropDown from '../components/DropDown';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 import { sodaOptions, syrupOptions, juiceOptions } from '../components/Ingredients';
 import {BASE_URL} from '../../ip_address'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // generate drink from AI
 
 const CreateDrinkPage = () => {
+  const route = useRoute();
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
   const [openDropdown, setOpenDropdown] = useState({
@@ -27,6 +28,13 @@ const CreateDrinkPage = () => {
   const [selectedSize, setSize] = useState(null);
   const [selectedIce, setIce] = useState(null);
   
+  useFocusEffect(React.useCallback(() => {
+    if(route.params?.fromGenerateButton){
+      console.log("Generating drinks activated from home page button")
+      GenerateAI();
+    }
+  }), [route.params?.fromGenerateButton]);
+
 
   const addToCart = async () => {
     try {
@@ -141,15 +149,12 @@ const CreateDrinkPage = () => {
   const GenerateAI = async () => {
     try {
       // const token = await AsyncStorage.getItem('userToken');
-      console.log("check 1");
       const response = await fetch(`${BASE_URL}/backend/generate/`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         }
       });
-
-      console.log("check 2");
 
       if (!response.ok) {
         throw new Error(`Error when trying to generate AI drink. Status: ${response.status}`);
