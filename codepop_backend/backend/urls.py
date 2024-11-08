@@ -7,6 +7,7 @@ from .views import DrinkOperations, UserDrinksLookup
 from .views import InventoryListAPIView, InventoryReportAPIView, InventoryUpdateAPIView
 from .views import NotificationOperations, UserNotificationLookup
 from .views import OrderOperations, UserOrdersLookup
+from .views import GenerateAIDrink
 
 #this ensures that the url calls the right function from the views for each type of request
 preferences_list = PreferencesOperations.as_view({
@@ -53,6 +54,14 @@ order_detail = OrderOperations.as_view({
     'get': 'retrieve',
     'put': 'update',
     'delete': 'destroy'
+})
+
+generate_gen_drink = GenerateAIDrink.as_view({
+    'get': 'generateGeneralUser',
+})
+
+generate_acc_drink = GenerateAIDrink.as_view({
+    'get': 'generateAccountUser',
 })
 
 urlpatterns = [
@@ -162,4 +171,11 @@ urlpatterns = [
     # - GET: Retrieve details of a specific order belonging to the specified user.
     # - DELETE: Remove the specific order from the database for the specified user.
     path('users/<int:user_id>/orders/<int:pk>/', order_detail, name='user_order_detail'),
+
+    # Endpoint to call the drinkAI when the generate drink button is clicked
+    # One for account users and one for general users
+    # - GET: Retrive generated-drink information the AI sends back
+    path('generate/<int:user_id>/', generate_acc_drink, name='account_ai_drink'),
+    path('generate/', generate_gen_drink, name='general_ai_drink'),
+
 ]

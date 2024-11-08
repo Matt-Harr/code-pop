@@ -23,6 +23,7 @@ from django.utils.decorators import method_decorator
 import json
 from rest_framework.decorators import action
 from django.utils.dateparse import parse_datetime
+from .drinkAI import generate_soda
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -368,6 +369,85 @@ class StripePaymentIntentView(View):
                 'ephemeralKey': ephemeral_key.secret,
                 'customer': customer.id,
                 'publishableKey': 'TODO: get a new publishable stripe key'
+            })
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+class GenerateAIDrink(viewsets.ModelViewSet): # Chatgpt had APIView
+    # ChatGPT solution, didnt seem to work though
+    # def get(self, request, user_id=None): # default value None if user isn't logged in
+    #     try:
+    #         if user_id:
+    #             # Generate AI drink for an account user (uses user preferences)
+    #             user = get_object_or_404(User, pk=user_id)
+    #             print(user)
+    #             preferences = Preference.objects.filter(UserID=user)
+    #             print(preferences)
+    #             if not preferences: # user has no preferences listed
+    #                 preferences = ["mango", "peach", "vanilla", "salted caramel", "orange", "lavender", "peppermint", "blue raspberry"]
+            
+    #             result = generate_soda(preferences)
+    #             return JsonResponse({
+    #                 'SyrupsUsed': result["syrups"],
+    #                 'SodaUsed': result["soda"][0],
+    #                 'AddIns': [],
+    #                 'Size': "medium",
+    #                 'Ice': "medium",
+    #                 "UserCreated": False,
+    #             })
+    #         else:
+    #             # Generate AI drink for a general user (uses hardcoded preferences)
+    #             print("check 3")
+    #             preferences = ["mango", "peach", "vanilla", "salted caramel", "orange", "lavender", "peppermint", "blue raspberry"]
+    #             result = generate_soda(preferences)
+    #             print("check 4")
+    #             return JsonResponse({
+    #                 'SyrupsUsed': result["syrups"],
+    #                 'SodaUsed': result["soda"][0],
+    #                 'AddIns': [],
+    #                 'Size': "medium",
+    #                 'Ice': "medium",
+    #                 "UserCreated": False,
+    #             })
+    #     except Exception as e:
+    #         return JsonResponse({'error': str(e)}, status=400)
+
+    # Generate AI drink for an account user (uses user preferences)
+    def generateAccountUser(self, user_id):
+        try:
+            user = get_object_or_404(User, pk=user_id)
+            print(user)
+            preferences = Preference.objects.filter(UserID=user)
+            print(preferences)
+            if not preferences: # user has no preferences listed
+                preferences = ["mango", "peach", "vanilla", "salted caramel", "orange", "lavender", "peppermint", "blue raspberry"]
+           
+            result = generate_soda(preferences)
+            return JsonResponse({
+                'SyrupsUsed': result["syrups"],
+                'SodaUsed': result["soda"][0],
+                'AddIns': [],
+                'Size': "medium",
+                'Ice': "medium",
+                "UserCreated": False,
+            })
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    # Generate AI drink for a general user (uses hardcoded preferences)
+    def generateGeneralUser(self):
+        try:
+            print("check 3")
+            preferences = ["mango", "peach", "vanilla", "salted caramel", "orange", "lavender", "peppermint", "blue raspberry"]
+            result = generate_soda(preferences)
+            print("check 4")
+            return JsonResponse({
+                'SyrupsUsed': result["syrups"],
+                'SodaUsed': result["soda"][0],
+                'AddIns': [],
+                'Size': "medium",
+                'Ice': "medium",
+                "UserCreated": False,
             })
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)

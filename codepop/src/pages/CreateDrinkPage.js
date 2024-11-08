@@ -138,8 +138,29 @@ const CreateDrinkPage = () => {
   };
   
   // function for generate drink button which generates a drink with AI
-  const GenerateAI = () => {
-    // logic to generate an AI drink
+  const GenerateAI = async () => {
+    try {
+      // const token = await AsyncStorage.getItem('userToken');
+      console.log("check 1");
+      const response = await fetch(`${BASE_URL}/backend/generate/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      console.log("check 2");
+
+      if (!response.ok) {
+        throw new Error(`Error when trying to generate AI drink. Status: ${response.status}`);
+      }
+
+      drinkDict = await response.json();
+      console.log(drinkDict);
+    }
+    catch (error) {
+      console.error('Error when trying to generate AI drink:', error);
+    }
   };
 
   return (
