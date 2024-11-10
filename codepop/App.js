@@ -118,7 +118,7 @@ const App = () => {
         />
         <Stack.Screen
           name="UpdateDrink"
-          component={PaymentPage}
+          component={UpdateDrink}
           options={{ title: 'UpdateDrink' }}
         />
         <Stack.Screen
