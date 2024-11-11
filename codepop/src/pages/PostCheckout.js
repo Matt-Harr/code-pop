@@ -48,6 +48,10 @@ const PostCheckout = () => {
   const minutes = String(Math.floor(timeLeft / 60)).padStart(2, '0');
   const seconds = String(timeLeft % 60).padStart(2, '0');
 
+  const handleDrinkRating = () => {
+    // add logic to add a drink rating to the drink object
+  };
+
   return (
     <View style={styles.container}>
       {/* Map Image Box */}
@@ -71,7 +75,10 @@ const PostCheckout = () => {
       {/* Rating Box */}
       <View style={[styles.section, styles.ratingSection]}>
         <Text style={styles.ratingLabel}>Option to rate drink:</Text>
-        <Button title="Rate Drink" onPress={() => alert('Rate your drink')} />
+
+        <TouchableOpacity onPress={handleDrinkRating} style={styles.button}>
+        <Text style={styles.buttonText}>Add to Cart</Text>
+      </TouchableOpacity>
       </View>
 
       {/* Locker Combo Box */}
@@ -100,16 +107,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   mapSection: {
-    backgroundColor: '#DFF0D8', // Light green box for map
+    backgroundColor: '#D30C7B', 
   },
   timerSection: {
-    backgroundColor: '#F92758', // Yellow box for timer
+    backgroundColor: '#C6C8EE', 
   },
   ratingSection: {
-    backgroundColor: '#FFA686', // Light peach for rating section
+    backgroundColor: '#FFA686', 
   },
   lockerComboSection: {
-    backgroundColor: '#C8E6C9', // Light mint green for locker combo
+    backgroundColor: '#F92758', 
   },
   heading: {
     fontSize: 24,
@@ -120,13 +127,13 @@ const styles = StyleSheet.create({
   timer: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: '#FF7F50', // Consistent accent color for the timer
+    color: '#FFA686',
     marginVertical: 10,
   },
   successMessage: {
     fontSize: 18,
     fontWeight: '500',
-    color: '#28A745', // Green color for success message
+    color: '#8DF1D3', 
     marginVertical: 10,
   },
   ratingLabel: {
@@ -148,6 +155,24 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 20,
   },
+  button: {
+    backgroundColor: '#D30C7B',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    marginVertical: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  }
 });
 
 export default PostCheckout;
