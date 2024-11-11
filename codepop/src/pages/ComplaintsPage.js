@@ -2,38 +2,63 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import NavBar from '../components/NavBar';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { BASE_URL } from '../../ip_address';  // Ensure BASE_URL is your server's base URL
 
-// to do
-    // connect AI chatbot
-
-const ComplaintPage = () => {
+const ComplaintsPage = () => {
     const [searchText, setSearchText] = useState('');
     const [messages, setMessages] = useState([{ text: "Hi! I'm Bob. How can I help you?", isBot: true }]);
     const scrollViewRef = useRef();
 
     // Function to handle message submission
-    const complaintAI = () => {
+    const complaintAI = async () => {
         if (searchText.trim() === '') return;
 
+        const userRequest = searchText;
+    
         // Add the user's message
         setMessages((prevMessages) => [
             ...prevMessages,
             { text: searchText, isBot: false }
         ]);
-
+    
         // Clear the input field
         setSearchText('');
-
-        // Simulate a bot response
-        // todo: add in chatbotAI logic
-        setTimeout(() => {
+    
+        try {
+            // Make a POST request to the chatbot endpoint
+            const response = await fetch(`${BASE_URL}/backend/chatbot/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: userRequest,
+                    grounding_info: `This is a customer support conversation for a dirty soda company. Respond helpfully to the customer's latest question.`,
+                    session_id: "default"
+                })
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                const botResponse = data.responses[0];
+    
+                // Update messages with bot's response
+                setMessages((prevMessages) => [
+                    ...prevMessages,
+                    { text: botResponse, isBot: true }
+                ]);
+            } else {
+                throw new Error("Failed to fetch response from chatbot");
+            }
+        } catch (error) {
+            console.error('Error in chatbot response:', error);
             setMessages((prevMessages) => [
                 ...prevMessages,
-                { text: "I'll review your complaint shortly.", isBot: true }
+                { text: "I'm having trouble understanding right now. Please try again later.", isBot: true }
             ]);
-        }, 500);
+        }
     };
-
+    
     // Scroll to the bottom of the chat whenever messages update
     useEffect(() => {
         if (scrollViewRef.current) {
@@ -87,6 +112,8 @@ const ComplaintPage = () => {
             <NavBar />
         </View>
     );
+
+    
 };
 
 const styles = StyleSheet.create({
@@ -160,4 +187,6 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ComplaintPage;
+export default ComplaintsPage;
+
+

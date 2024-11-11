@@ -7,6 +7,7 @@ from .views import DrinkOperations, UserDrinksLookup
 from .views import InventoryListAPIView, InventoryReportAPIView, InventoryUpdateAPIView
 from .views import NotificationOperations, UserNotificationLookup
 from .views import OrderOperations, UserOrdersLookup
+from .views import Chatbot
 
 #this ensures that the url calls the right function from the views for each type of request
 preferences_list = PreferencesOperations.as_view({
@@ -162,4 +163,8 @@ urlpatterns = [
     # - GET: Retrieve details of a specific order belonging to the specified user.
     # - DELETE: Remove the specific order from the database for the specified user.
     path('users/<int:user_id>/orders/<int:pk>/', order_detail, name='user_order_detail'),
+
+    # Customer Service Chatbot
+    # - POST: Send the User response and get back what the chatbot says
+    path('chatbot/', Chatbot.as_view(), name='chatbot')
 ]
