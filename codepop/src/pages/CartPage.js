@@ -51,7 +51,6 @@ const CartPage = () => {
 
       const fetchedDrinks = [];
       for (let i = 0; i < currentList.length; i++) {
-<<<<<<< HEAD
         const response = await fetch(`${BASE_URL}/backend/drinks/${currentList[i]}/`, {
           method: 'GET',
           headers: {
@@ -59,23 +58,9 @@ const CartPage = () => {
           },
         });
         const data = await response.json();
-        if (data != null) {
+        if (data != null && data.Size && data.SodaUsed && data.Ice) {
           fetchedDrinks.push(data); // Add each drink to the temporary array
         }
-=======
-          const response = await fetch(`${BASE_URL}/backend/drinks/${currentList[i]}/`, {
-              method: 'GET',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Token ${token}`,
-              },
-          });
-          const data = await response.json();
-          // Check if the data contains necessary fields
-          if (data && data.Size && data.SodaUsed && data.Ice) {
-              fetchedDrinks.push(data);
-          }
->>>>>>> 570f5247f45cb50ba32e5db70a2ad415281afa41
       }
 
   
