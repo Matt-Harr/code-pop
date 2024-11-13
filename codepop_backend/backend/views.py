@@ -392,19 +392,20 @@ class GenerateAIDrink(APIView):
         """Generate AI drink for a registered user using their preferences."""
         user = get_object_or_404(User, pk=user_id)
         preferences = Preference.objects.filter(UserID=user)
-        
-        # Default to hardcoded preferences if user has none
-        preferences_list = (
-            [pref.name for pref in preferences]
-            if preferences.exists()
-            else ["mango", "peach", "vanilla", "salted caramel", "orange", "lavender", "peppermint", "blue raspberry"]
-        )
+        preferences_list = []
 
+        if preferences.exists():
+            for pref in preferences:
+                preferences_list.append(pref.Preference)
+        else:
+            preferences_list = ["mango", "peach", "vanilla", "salted caramel", "orange", "lavender", "peppermint", "blue raspberry"]
+        print("User") # Test code
         return self.generate_response_data(preferences_list, user_created=True)
 
     def generate_general_user(self):
         """Generate AI drink for a general user with hardcoded preferences."""
         preferences = ["mango", "peach", "vanilla", "salted caramel", "orange", "lavender", "peppermint", "blue raspberry"]
+        print("General") # Test code
         return self.generate_response_data(preferences, user_created=False)
 
     def generate_response_data(self, preferences, user_created):

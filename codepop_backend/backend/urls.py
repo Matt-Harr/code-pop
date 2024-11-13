@@ -173,5 +173,4 @@ urlpatterns = [
     
     # For general users: no user_id provided
     path('generate/', GenerateAIDrink.as_view(), name='general_ai_drink'),
-
 ]

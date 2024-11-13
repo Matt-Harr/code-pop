@@ -28,13 +28,21 @@ const CreateDrinkPage = () => {
   const [selectedSize, setSize] = useState(null);
   const [selectedIce, setIce] = useState(null);
   
-  useFocusEffect(React.useCallback(() => {
-    if(route.params?.fromGenerateButton){
-      console.log("Generating drinks activated from home page button")
-      GenerateAI();
-    }
-  }), [route.params?.fromGenerateButton]);
+  // useFocusEffect(React.useCallback(() => {
+  //   if(route.params?.fromGenerateButton){
+  //     console.log("Generating drinks activated from home page button")
+  //     GenerateAI();
+  //   }
+  // }), [route.params?.fromGenerateButton]);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      if (route.params?.fromGenerateButton) {
+        console.log("Generating drinks activated from home page button");
+        GenerateAI();
+      }
+    }, [route.params?.fromGenerateButton])
+  );
 
   const addToCart = async () => {
     try {
@@ -148,8 +156,14 @@ const CreateDrinkPage = () => {
   // function for generate drink button which generates a drink with AI
   const GenerateAI = async () => {
     try {
-      // const token = await AsyncStorage.getItem('userToken');
-      const response = await fetch(`${BASE_URL}/backend/generate/`, {
+      const user_id = await AsyncStorage.getItem('userId');
+      let url = `${BASE_URL}/backend/generate/`;
+
+      if (user_id) {
+        url = `${BASE_URL}/backend/generate/${user_id}/`;
+      }
+
+      const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -161,6 +175,9 @@ const CreateDrinkPage = () => {
       }
 
       drinkDict = await response.json();
+      // To frontend people:
+      // drinkDict is missing DrinkID, Name, Rating, and Price
+      // (also technically "Favorite" but I don't think we need to worry about that here)
       console.log(drinkDict);
     }
     catch (error) {
