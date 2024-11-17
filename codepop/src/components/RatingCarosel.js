@@ -58,7 +58,7 @@ const RatingCarosel = ({ purchasedDrinks }) => {
 
         const token = await AsyncStorage.getItem('userToken');
         const response = await fetch(`${BASE_URL}/backend/drinks/${drinkID}/`, {
-            method: 'PATCH',
+            method: 'PUT',
             headers: {
             'Content-Type': 'application/json',
             'Authorization': `Token ${token}`,
@@ -76,6 +76,7 @@ const RatingCarosel = ({ purchasedDrinks }) => {
         }
     };
 
+
     // Function to add a drink to favorites
     const addToFavs = async (drinkID) => {
         try {
@@ -83,7 +84,7 @@ const RatingCarosel = ({ purchasedDrinks }) => {
 
         const token = await AsyncStorage.getItem('userToken');
         const response = await fetch(`${BASE_URL}/backend/drinks/${drinkID}/`, {
-            method: 'PATCH',
+            method: 'PUT',
             headers: {
             'Content-Type': 'application/json',
             'Authorization': `Token ${token}`,
