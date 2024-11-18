@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as Font from 'expo-font';
 import React, { useEffect } from 'react';
@@ -16,6 +16,9 @@ import GeneralHomePage from './src/pages/GeneralHomePage';
 import CompletePage from './src/pages/CompletePage';
 import CheckoutForm from './src/pages/CheckoutForm';
 import PreferencesPage from './src/pages/PreferencesPage';
+import { TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 const Stack = createNativeStackNavigator();
 const title = 'CodePop' 
@@ -108,7 +111,10 @@ const App = () => {
             title: title, 
             headerTitleStyle: {
               // fontFamily: 'CherryBombOne',
-          },}}
+            },
+            headerRight: () => (
+              <ProfileButton />
+            ),}}
         />
         <Stack.Screen
           name="payment"
@@ -142,6 +148,16 @@ const App = () => {
         />
       </Stack.Navigator>
     </NavigationContainer>
+  );
+};
+
+const ProfileButton = () => {
+  const navigation = useNavigation(); // Use navigation hook
+
+  return (
+    <TouchableOpacity onPress={() => navigation.navigate('Preferences')}>
+      <Icon name="person-circle-outline" size={30} color="#000" />
+    </TouchableOpacity>
   );
 };
 

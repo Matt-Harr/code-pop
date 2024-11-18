@@ -50,7 +50,7 @@ const CartPage = () => {
           fetchedDrinks.push(data); // Add each drink to the temporary array
         }
       }
-  
+      
       setDrinks(fetchedDrinks); // Update state once after all drinks are collected
       calculateTotalPrice(fetchedDrinks); // Calculate total price after fetching drinks
   
@@ -65,7 +65,12 @@ const CartPage = () => {
 
   const calculatePrice = (drink) => {
     // $2 base price + $0.30 per ingredient
-    return 2 + (drink.SyrupsUsed.length + drink.AddIns.length) * 0.3;
+    if (drink.Price == 2) {
+      return 2 + (drink.SyrupsUsed.length + drink.AddIns.length) * 0.3;
+    } else {
+      // Carousel drink prices
+      return drink.Price;
+    }
   };
 
   const calculateTotalPrice = (drinksList) => {
@@ -83,14 +88,17 @@ const CartPage = () => {
       const currentList = cartList ? JSON.parse(cartList) : [];
       const token = await AsyncStorage.getItem('userToken');
   
-      // Delete the drink from the backend database
-      await fetch(`${BASE_URL}/backend/drinks/${drinkId}/`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token ${token}`,
-        },
-      });
+      // Don't delete seasonal carousel items (items prepopulated in the database after running clean script)
+      if (drinkId > 6) {
+        // Delete the drink from the backend database
+        await fetch(`${BASE_URL}/backend/drinks/${drinkId}/`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`,
+          },
+        });
+      }
   
       // Update the local state to remove the drink from the cart page
       const updatedDrinks = drinks.filter(data => data.DrinkID !== drinkId);
