@@ -1,17 +1,73 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Alert } from 'react-native';
-import NavBar from '../components/NavBar';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Alert, Modal } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {BASE_URL} from '../../ip_address'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TextInput } from 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import RNPickerSelect from 'react-native-picker-select';
 
 const AdminDash = () => {
 
   const [users, setUsers] = useState([]);
+  const [popupIsOpen, setPopupIsOpen] = useState(false);
+  const [editorIsOpen, setEditorIsOpen] = useState(false);
+
+  const [userToEdit, setUserToEdit] = useState(null)
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    firstName: "",
+    lastName: "",
+    password: "",
+    role: "",
+  })
+  // const [newUsername, changeUsername] = useState();
+  // const [newFirstname, changeFirstname] = useState();
+  // const [newLastname, changeLastname] = useState();
+  // const [newPassword, changePassword] = useState();
+  // const [newRole, changeRole] = useState();
 
   useFocusEffect(React.useCallback(() => {
     getUsers();
   }, []));
+
+  const placeholder = {
+    label: 'Select a role...',
+    value: null,
+  };
+
+  const roleOptions = [
+    { label: 'User', value: 'user' },
+    { label: 'Staff', value: 'staff' },
+    { label: 'Admin', value: 'admin' },
+  ];
+
+  const openPopup = () => {setPopupIsOpen(true)}
+  const closePopup = () => {setPopupIsOpen(false)}
+
+  const openEditor = (user) => {
+    setUserToEdit(user)
+    setUserInfo({
+      username: user.username,
+      firstName: user.first_name,
+      lastName: user.last_name,
+      password: "",
+      role: user.is_superuser ? "admin" : user.is_staff ? "staff" : "user",
+    })
+    setEditorIsOpen(true)
+  }
+  const closeEditor = () => {
+    setEditorIsOpen(false)
+    setUserToEdit(null)
+    setUserInfo({
+      username: "",
+      firstName: "",
+      lastName: "",
+      password: "",
+      role: "",
+    })
+  }
+
 
   const getUsers = async () => {
     const token = await AsyncStorage.getItem("userToken");
@@ -30,7 +86,6 @@ const AdminDash = () => {
       }
 
       const userList = await response.json();
-      console.log(userList);
       setUsers(userList);
     }
     catch (error) {
@@ -44,12 +99,13 @@ const AdminDash = () => {
       const token = await AsyncStorage.getItem('userToken');
 
       if (!user_id) {
-        console.log("Error: failed to get active user's id.")
+        console.log("Error: Failed to get active user's id.")
         return
       }
 
       if (Number(user_id) === Number(user.id)) {
-        Alert.alert('Error: you cannot delete yourself')
+        Alert.alert('Error: You cannot delete yourself')
+        closePopup();
       }
       else {
         console.log("Deleting user...");
@@ -68,6 +124,7 @@ const AdminDash = () => {
         const result = await response.json()
         Alert.alert(result.message)
         getUsers();
+        closePopup();
       }
     }
     catch (error) {
@@ -75,54 +132,124 @@ const AdminDash = () => {
     }
   };
 
-  const promoteUser = async (user) => {
+  const editUser = async (user) => {
     const token = await AsyncStorage.getItem("userToken");
 
     try {
-      if (user.is_superuser === true) {
-        Alert.alert('Error: User is already an admin');
+      const edits = {}
+      if (!userInfo.username) {
+        edits["username"] = "unchanged";
       }
       else {
-        console.log("Promoting user...");
-        const response = await fetch(`${BASE_URL}/backend/users/promote/${user.id}/`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Token ${token}`,
-            'Content-Type': 'application/json',
-          }
-        });
-    
-        if (!response.ok) {
-          throw new Error(`Error when trying to promote a user. Status: ${response.status}`);
-        }
-
-        const result = await response.json()
-        Alert.alert(result.message)
-        getUsers();
+        edits["username"] = userInfo.username;
       }
+
+      if (!userInfo.firstName) {
+        edits["firstName"] = "unchanged";
+      }
+      else {
+        edits["firstName"] = userInfo.firstName;
+      }
+
+      if (!userInfo.lastName) {
+        edits["lastName"] = "unchanged";
+      }
+      else {
+        edits["lastName"] = userInfo.lastName;
+      }
+
+      if (!userInfo.password) {
+        edits["password"] = "unchanged";
+      }
+      else {
+        edits["password"] = userInfo.password;
+      }
+
+      if (!userInfo.role) {
+        edits["role"] = "unchanged";
+      }
+      else {
+        edits["role"] = userInfo.role;
+      }
+      
+      console.log("Updating user...");
+      const response = await fetch(`${BASE_URL}/backend/users/edit/${user.id}/`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Token ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({edits}),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error when trying to edit a user. Status: ${response.status}`);
+      }
+
+      const result = await response.json()
+      Alert.alert(result.message)
+      getUsers();
+      closeEditor();
     }
     catch (error) {
-      console.error('Error when trying to promote a user:', error);
+      console.error('Error when trying to edit a user:', error);
     }
   };
 
   const renderUser = ({ item }) => {
     return (
-      <View style={styles.box}>
-        <View>
-          <Text style={styles.mainText}>{item.username}</Text>
-          <Text style={styles.secondaryText}>{item.first_name} {item.last_name}</Text>
-          <Text style={styles.secondaryText}>Role: {item.is_superuser ? <Text style={styles.role}>Admin</Text> : item.is_staff ? <Text style={styles.role}>Staff</Text> : "User"}</Text>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <View style={styles.box}>
+          <View>
+            <Text style={styles.mainText}>{item.username}</Text>
+            <Text style={styles.secondaryText}>{item.first_name} {item.last_name}</Text>
+            <Text style={styles.secondaryText}>Role: {item.is_superuser ? <Text style={styles.role}>Admin</Text> : item.is_staff ? <Text style={styles.role}>Staff</Text> : "User"}</Text>
+          </View>
+
+          <View style={styles.userButtonContainer}>
+            <TouchableOpacity onPress={() => openEditor(item)} style={styles.button}>
+              <Text style={styles.buttonText}>Edit</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={openPopup} style={styles.button}>
+              <Text style={styles.buttonText}>Delete</Text>
+            </TouchableOpacity>
+          </View>
+
+          <Modal transparent={true} visible={popupIsOpen} onRequestClose={closePopup}>
+              <View style={styles.modalBackground}>
+                <View style={styles.popup}>
+                    <Text style={styles.modalText}>Are you sure you want to delete user "{item.username}"?</Text>
+                    <View styles={styles.modalButtonContainer}>
+                      <TouchableOpacity onPress={() => deleteUser(item)} style={styles.button}><Text style={styles.buttonText}>Yes</Text></TouchableOpacity>
+                      <TouchableOpacity onPress={closePopup} style={styles.button}><Text style={styles.buttonText}>No</Text></TouchableOpacity>
+                    </View>
+                  </View>
+              </View>
+            </Modal>
+            <Modal transparent={true} visible={editorIsOpen} onRequestClose={closeEditor}>
+              <View style={styles.modalBackground}>
+                <View style={styles.editor}>
+                  <TouchableOpacity onPress={closeEditor} style={styles.xButton}><Text style={styles.x}>x</Text></TouchableOpacity>
+                  <Text style={styles.editorHeader}>Edit user "{userToEdit?.username}"</Text>
+                  <Text style={styles.editorText}>Username:</Text><TextInput onChangeText={(text) => setUserInfo(prev => ({ ...prev, username: text }))} value={userInfo.username} style={styles.textBox}/>
+                  <Text style={styles.editorText}>First Name:</Text><TextInput onChangeText={(text) => setUserInfo(prev => ({ ...prev, firstName: text }))} value={userInfo.firstName} style={styles.textBox}/>
+                  <Text style={styles.editorText}>Last Name:</Text><TextInput onChangeText={(text) => setUserInfo(prev => ({ ...prev, lastName: text }))} value={userInfo.lastName} style={styles.textBox}/>
+                  <Text style={styles.editorText}>Password:</Text><TextInput onChangeText={(text) => setUserInfo(prev => ({ ...prev, password: text }))} value={userInfo.password} placeholder={"Empty for security purposes"} style={styles.textBox}/>
+                  <Text style={styles.editorText}>Role: {"(Currently is"} {item.is_superuser ? "Admin)" : item.is_staff ? "Staff)" : "User)"}</Text>
+                  <RNPickerSelect
+                    style={styles.dropdown}
+                    placeholder={placeholder}
+                    items={roleOptions}
+                    onValueChange={(value) => setUserInfo(prev => ({ ...prev, role: value }))}
+                    value={userInfo.role}
+                  />
+                  <TouchableOpacity onPress={() => editUser(userToEdit)} style={styles.button}><Text style={styles.buttonText}>Save</Text></TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => deleteUser(item)} style={styles.button}>
-            <Text style={styles.buttonText}>Delete</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => promoteUser(item)} style={styles.button}>
-            <Text style={styles.buttonText}>Promote</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </GestureHandlerRootView>
     );
   };
 
@@ -181,9 +308,9 @@ const styles = StyleSheet.create({
   role: {
     fontWeight: 'bold',
   },
-  buttonContainer: {
+  userButtonContainer: {
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
   button: {
     flex: 0,
@@ -194,11 +321,87 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 45,
     width: 100,
+    margin: 7,
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 18,
+  },
+  modalBackground: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    zIndex: 2,
+  },
+  popup: {
+    flex: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: '#f4f4f4',
+    height: 300,
+    width: 380,
+    zIndex: 3,
+    padding: 15,
+    borderRadius: 10,
+  },
+  modalText: {
+    fontSize: 23,
+    textAlign: "center",
+    marginBottom: 25,
+  },
+  modalButtonContainer: { // These need to be side by side
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: '100%',
+  },
+  editor: {
+    flex: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: '#f4f4f4',
+    height: 600,
+    width: 360,
+    zIndex: 3,
+    padding: 20,
+    borderRadius: 10,
+  },
+  editorText: {
+    fontSize: 20,
+  },
+  xButton: {
+    flex: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    borderRadius: 100,
+    backgroundColor: "#FF0000",
+    width: 45,
+    height: 45,
+  },
+  x: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: '#FFFFFF'
+  },
+  editorHeader: {
+    fontSize: 25,
+    fontWeight: "bold",
+    marginBottom: 30,
+  },
+  textBox: {
+    borderWidth: 2,
+    borderColor: '#ccc',
+    width: '100%',
+    height: 35,
+    fontSize: 20,
+    marginBottom: 20,
+  },
+  dropdown: {
+
   },
 });
 

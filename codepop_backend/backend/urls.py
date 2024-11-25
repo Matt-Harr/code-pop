@@ -65,7 +65,7 @@ revenue_details = RevenueViewSet.as_view({'get': 'retrieve', 'put': 'update', 'd
 
 user_operations = UserOperations.as_view({
     'get': 'get',
-    'put': 'promote',
+    'post': 'edit',
     'delete': 'delete',
 })
 
@@ -205,8 +205,8 @@ urlpatterns = [
     # Endpoint to do operations on user accounts for the Admin Dashboard
     # - GET: Retrieve a list of all users
     # - DELETE: Delete a user from the database
-    # - PUT: Promote a user to manager, promote a manager to admin
+    # - PUT: Edit a user and update info in the database
     path('users/', user_operations, name='get_user_list'),
     path('users/delete/<int:user_id>/', user_operations, name='delete_user'),
-    path('users/promote/<int:user_id>/', user_operations, name='promote_user'),
+    path('users/edit/<int:user_id>/', user_operations, name='edit_user'),
 ]

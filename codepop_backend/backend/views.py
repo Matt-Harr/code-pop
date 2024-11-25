@@ -489,8 +489,7 @@ class RevenueViewSet(viewsets.ModelViewSet):
         # Proceed with the standard update process
         return super().update(request, *args, **kwargs)
     
-class UserOperations(viewsets.ModelViewSet): # was ListAPIView
-    # never works
+class UserOperations(viewsets.ModelViewSet):
     permission_classes = [IsSuperUser]
     serializer_class = GetUserSerializer
 
@@ -507,16 +506,45 @@ class UserOperations(viewsets.ModelViewSet): # was ListAPIView
         except Exception as e:
             return JsonResponse({'Error': str(e)}, status=400)
 
-    def promote(self, request, user_id):
+    def edit(self, request, user_id):
         try:
             user = User.objects.get(id=user_id)
-            if (user.is_staff):
-                user.is_staff = False
-                user.is_superuser = True
-            else:
-                user.is_staff = True
+
+            data = json.loads(request.body)
+            edits = data.get('edits', {})
+
+            username = edits.get("username", None)
+            first_name = edits.get("firstName", None)
+            last_name = edits.get("lastName", None)
+            password = edits.get("password", None)
+            role = edits.get("role", None)
+
+            if (user.username != username and username != "unchanged" and username):
+                user.username = username
+
+            if (user.first_name != first_name and first_name != "unchanged" and first_name):
+                user.first_name = first_name
+
+            if (user.last_name != last_name and last_name != "unchanged" and last_name):
+                user.last_name = last_name
+
+            if (user.password != password and password != "unchanged" and password):
+                user.set_password(password)
+                print("Password updated")
+
+            if (role != "unchanged" and role):
+                if (role == "user"):
+                    user.is_staff = False
+                    user.is_superuser = False
+                elif (role == "staff"):
+                    user.is_staff = True
+                    user.is_superuser = False
+                elif (role == "admin"):
+                    user.is_staff = False
+                    user.is_superuser = True
+
             user.save()
-            return JsonResponse({"message":"User promoted successfully"}, status=status.HTTP_200_OK)
+            return JsonResponse({"message":"User edited successfully"}, status=status.HTTP_200_OK)
         except Exception as e:
             return JsonResponse({'Error': str(e)}, status=400)
         
