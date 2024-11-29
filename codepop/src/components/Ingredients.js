@@ -1,9 +1,9 @@
 // Ingredients.js
 const sodaOptions = [
-  { label: 'coke', value: 'coke', color: '#D32F2F' },  // Dark red
-  { label: 'diet coke', value: 'diet coke', color: '#9E9E9E' },  // Light gray
-  { label: 'mountain dew', value: 'mountain dew', color: '#9E9E00' },  // Bright yellow-green
-  { label: 'diet mountain dew', value: 'diet mountain dew', color: '#C6E300' },  // Light green-yellow
+  { label: 'coke', value: 'coke', color: '#fc1947' },  // Dark red
+  { label: 'diet coke', value: 'diet coke', color: '#f75979' },  // Light gray
+  { label: 'mountain dew', value: 'mountain dew', color: '#76cfae' },  // Bright yellow-green
+  { label: 'diet mountain dew', value: 'diet mountain dew', color: '#a9dbc9' },  // Light green-yellow
   { label: 'dr. pepper', value: 'dr. pepper', color: '#6A1B9A' },  // Purple
   { label: 'diet dr. pepper', value: 'diet dr. pepper', color: '#9C27B0' },  // Light purple
   { label: 'sprite', value: 'sprite', color: '#A2D2A6' },  // Mint green
@@ -12,27 +12,28 @@ const sodaOptions = [
   { label: 'diet pepsi', value: 'diet pepsi', color: '#1E88E5' },  // Lighter blue
   { label: 'rootbeer', value: 'rootbeer', color: '#4E342E' },  // Dark brown
   { label: 'fanta', value: 'fanta', color: '#FF7043' },  // Orange
-  { label: 'big red', value: 'big red', color: '#C62828' },  // Red
-  { label: 'poweraid', value: 'poweraid', color: '#8E24AA' },  // Purple pink
+  { label: 'big red', value: 'big red', color: '#c75552' },  // Red
+  { label: 'poweraid', value: 'poweraid', color: '#71bde3' },  // Purple pink
   { label: 'lemonade', value: 'lemonade', color: '#FBC02D' },  // Lemon yellow
   { label: 'light lemonade', value: 'light lemonade', color: '#FFF176' },  // Soft yellow
 ];
 
 const syrupOptions = [
-  { label: 'vanilla', value: 'vanilla', color: '#F1C40F' },  // Warm yellow
-  { label: 'coconut', value: 'coconut', color: '#D7CCC8' },  // Light beige
+  { label: 'vanilla', value: 'vanilla', color: '#ffeccf' },  // Warm yellow
+  { label: 'coconut', value: 'coconut', color: '#faf7f2' },  // Light beige
   { label: 'passion fruit', value: 'passion fruit', color: '#FF7043' },  // Orange
   { label: 'mango', value: 'mango', color: '#FFB300' },  // Mango yellow-orange
-  { label: 'guava', value: 'guava', color: '#D81B60' },  // Bright pink
+  { label: 'guava', value: 'guava', color: '#fc86a5' },  // Bright pink
+  { label: 'pineapple', value: 'pineapple', color: '#f5b12a' },
   { label: 'banana', value: 'banana', color: '#FBC02D' },  // Yellow
-  { label: 'strawberry', value: 'strawberry', color: '#E91E63' },  // Strawberry pink
-  { label: 'raspberry', value: 'raspberry', color: '#D50000' },  // Red
+  { label: 'strawberry', value: 'strawberry', color: '#d91129' },  // Strawberry pink
+  { label: 'raspberry', value: 'raspberry', color: '#b5093f' },  // Red
   { label: 'blackberry', value: 'blackberry', color: '#4A148C' },  // Dark purple
-  { label: 'pomegranate', value: 'pomegranate', color: '#9C27B0' },  // Purple-pink
-  { label: 'cranberry', value: 'cranberry', color: '#D32F2F' },  // Red
+  { label: 'pomegranate', value: 'pomegranate', color: '#b31537' },  // Purple-pink
+  { label: 'cranberry', value: 'cranberry', color: '#660143' },  // Red
   { label: 'grape', value: 'grape', color: '#673AB7' },  // Purple
-  { label: 'kiwi', value: 'kiwi', color: '#388E3C' },  // Kiwi green
-  { label: 'huckleberry', value: 'huckleberry', color: '#7B1FA2' },  // Purple
+  { label: 'kiwi', value: 'kiwi', color: '#689e52' },  // Kiwi green
+  { label: 'huckleberry', value: 'huckleberry', color: '#3a0a70' },  // Purple
   { label: 'peach', value: 'peach', color: '#FF7043' },  // Light orange
   { label: 'watermelon', value: 'watermelon', color: '#F44336' },  // Watermelon red
   { label: 'green apple', value: 'green apple', color: '#8BC34A' },  // Green
@@ -71,6 +72,7 @@ const juiceOptions = [
   { label: 'passion fruit', value: 'passion_fruit', color: '#FF7043' },  // Orange
   { label: 'guava', value: 'guava', color: '#D81B60' },  // Bright pink
   { label: 'peach', value: 'peach', color: '#FF7043' },  // Light orange
+  { label: 'peach puree', value: 'peach puree', color: '#FF7043' },
   { label: 'cranberry', value: 'cranberry', color: '#D32F2F' },  // Red
   { label: 'raspberry', value: 'raspberry', color: '#D50000' },  // Red
   { label: 'strawberry', value: 'strawberry', color: '#E91E63' },  // Pink
