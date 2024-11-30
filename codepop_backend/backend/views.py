@@ -390,7 +390,7 @@ class UserOrdersLookup(ListCreateAPIView):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class StripePaymentIntentView(View):
-
+    
     def post(self, request, *args, **kwargs):
         try:
             data = json.loads(request.body)
@@ -425,7 +425,28 @@ class StripePaymentIntentView(View):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
 
+def refund_order(client_secret_or_id):
+    try:
+        # Extract PaymentIntent ID if a client secret is provided
+        if "_secret_" in client_secret_or_id:
+            payment_intent_id = client_secret_or_id.split("_secret_")[0]
+        else:
+            payment_intent_id = client_secret_or_id
 
+        # Process the refund using the PaymentIntent ID
+        refund = stripe.Refund.create(
+            payment_intent=payment_intent_id,
+        )
+        print("Refund successful:", refund)
+        return True
+
+    except stripe.error.StripeError as e:
+        print(f"Stripe error: {e}")
+        return False
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return False
+    
 class GenerateAIDrink(APIView):
     permission_classes = [AllowAny]
 
