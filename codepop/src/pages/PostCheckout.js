@@ -15,9 +15,9 @@ const PostCheckout = () => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [isNearby, setIsNearby] = useState(false);
 
-  const storeLocation = { //the store location is the Logan Cemetery because integrating this geolocator has been the death of me
-      latitude: 41.748978207108976,
-      longitude: -111.8076790945287
+  const storeLocation = { //this is my apartment in case you were wondering lol
+      latitude: 41.7376316,
+      longitude: -111.8216457
 //        latitude: 37.422, //the emulator will likely user coordinates to google headquarters which is these coordinates. uncomment to test <500 yard option
 //        longitude: -122.0839
   };
@@ -33,7 +33,6 @@ const PostCheckout = () => {
           try {
                 // Fetch the user's current location
                 let currentLocation = await Location.getCurrentPositionAsync({});
-                console.log(JSON.stringify(currentLocation));
                 setLocation(currentLocation);
               } catch (error) {
                 console.error("Error fetching location:", error);
@@ -77,8 +76,6 @@ const PostCheckout = () => {
           storeLocation.longitude
         );
 
-        console.log("Distance to store:", distance, "meters");
-
         // 500 yards is approximately 457.2 meters
         if (distance <= 457.2) {
           setIsNearby(true);
@@ -102,7 +99,6 @@ const PostCheckout = () => {
     const fetchPurchasedDrinks = async () => {
       try {
         const storedDrinks = await AsyncStorage.getItem("purchasedDrinks");
-        console.log(storedDrinks);
         const parsedDrinks = storedDrinks ? JSON.parse(storedDrinks) : [];
         setPurchasedDrinks(parsedDrinks);
 
@@ -224,7 +220,6 @@ const PostCheckout = () => {
         LockerCombo: lockerCombo,
       }),
     });
-    console.log("Set Locker Combo To:", lockerCombo);
   };
 
   // Convert timeLeft to minutes and seconds format
