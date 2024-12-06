@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Alert, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Alert, Modal, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {BASE_URL} from '../../ip_address'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -258,6 +258,11 @@ const AdminDash = () => {
 
   return (
     <View style={styles.mainContainer}>
+      <Image 
+            source={require('../../assets/PinkBubbles.png')}
+            style={styles.image}
+            resizeMode="cover"
+        />
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Admin Dashboard</Text>
       </View>
@@ -271,6 +276,11 @@ const AdminDash = () => {
 };
 
 const styles = StyleSheet.create({
+  image: {
+    width: '150%',
+    height: '200%',
+    ...StyleSheet.absoluteFillObject,
+  },
   mainContainer: {
     flex: 1,
     padding: 20,
@@ -300,6 +310,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: 'space-between',
     backgroundColor: '#8DF1D3',
+    zIndex: 2, // Ensure it's above the image
   },
   mainText: {
     fontSize: 24,
