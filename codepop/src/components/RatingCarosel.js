@@ -82,7 +82,7 @@ const RatingCarosel = ({ purchasedDrinks }) => {
     };
 
 
-    // Function to add a drink to favorites
+    // Function to add a drink to favorites - save functionality for phase 2
     const addToFavs = async (drink) => {
         console.log("DrinkID:", drink);
         try {
@@ -118,7 +118,7 @@ const RatingCarosel = ({ purchasedDrinks }) => {
     
                 {/* Middle: Add to Favorites and Drink GIF */}
                 <View style={styles.middleContainer}>
-                    <TouchableOpacity onPress={() => addToFavs(drink)} style={styles.button}>
+                    <TouchableOpacity onPress={() => console.log("Drink added to favorites")} style={styles.button}>
                         <Text>Add to Favorites</Text>
                     </TouchableOpacity>
                     <Gif layers={layers} height={120} width={60} />
