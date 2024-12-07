@@ -73,21 +73,23 @@ Follow these instructions to set up the CodePop project on your machine.
       tzdata              2024.2
       urllib3             2.2.3
       ```
-    - to deactivate the virtual enviroment run the following command
-      ```bash
-      deactivate
-      ```
-    - if you need to add a package to the virtual enviroment simply use the following command
-      ```bash
-      python -m pip install <name of package>
-      ```
-    - then update the requirements.txt file by doing the following (while you are in the root directory of this project)
-      ```bash
-      python -m pip freeze > requirements.txt
-      ```
-    - also please update what the expected output for the python -m pip list when you add new packages
+    - Virtual Enviroment FAQs
 
-    - git ignores the virtual enviroment directory but not the requirements.txt file. This is because the requirements.txt will be used by all developers to ensure proper dependancies are installed. So be sure to push your requirements.txt file when you make changes
+      - to deactivate the virtual enviroment run the following command
+        ```bash
+        deactivate
+        ```
+      - if you need to add a package to the virtual enviroment simply use the following command
+        ```bash
+        python -m pip install <name of package>
+        ```
+      - then update the requirements.txt file by doing the following (while you are in the root directory of this project)
+        ```bash
+        python -m pip freeze > requirements.txt
+        ```
+      - also please update what the expected output for the python -m pip list when you add new packages
+
+      - git ignores the virtual enviroment directory but not the requirements.txt file. This is because the requirements.txt will be used by all developers to ensure proper dependancies are installed. So be sure to push your requirements.txt file when you make changes
 2. **Download and Install PostgreSQL**
    - Download PostgreSQL from the following link:
      [PostgreSQL Downloads](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
@@ -111,10 +113,7 @@ Follow these instructions to set up the CodePop project on your machine.
      CREATE DATABASE codepop_database;
      ```
 
-5. **Install Stripe**
-   - pip install stripe (Windows)
-
-6. **Run Migrations, Populate Database and Start the Server**
+5. **Run Migrations, Populate Database and Start the Server**
    - Navigate to the codepop_backend directory that contains the manage.py file
    - Run the following script, this will clean the database and populate it with data to be used 
      ```bash
@@ -136,11 +135,7 @@ Follow these instructions to set up the CodePop project on your machine.
    - Download and install Android Studio, then set up a virtual Android device:
      [Android Studio Downloads](https://developer.android.com/studio)
 
-3. **Install Stripe Library for React Native**
-   - npm install react@18.2.0
-   - npm install @stripe/stripe-react-native
-
-4. **Start the React Native App**
+3. **Start the React Native App**
    - Navigate to the `codepop` directory and edit the base URL in `ip_address.js` to match your IP address and port.
    - Install dependancies by running the following command:
       ```bash
