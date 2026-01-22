@@ -2,13 +2,13 @@
 
 ## 1. Introduction
 
-### 1.1 Overview of CodePop
+**1.1 Overview of CodePop**
 CodePop is an innovative beverage application that leverages AI, automation, and distributed systems to redefine soda customization and ordering. The platform supports mobile and desktop usage and is designed for minimal human intervention, relying on AI-driven inventory management, ordering, logistics coordination, and maintenance tracking.
 
-### 1.2 Purpose of This Document
+**1.2 Purpose of This Document**
 This document defines the complete functional, non-functional, business, and system requirements for CodePop. It aligns developers, stakeholders, and system architects on scope, priorities, and responsibilities, including newly introduced multi-store, logistics, and maintenance capabilities.
 
-### 1.3 MoSCoW Analysis
+**1.3 MoSCoW Analysis**
 Requirements are categorized as:
 
 - **M** – Must Have  
@@ -16,24 +16,25 @@ Requirements are categorized as:
 - **C** – Could Have  
 - **W** – Won’t Have  
 
+# Requirements
 ---
 
-## Functional Requirements
+## Functional Requirements 
 
-2. System Scope Expansion (New)
-2.1 Multi-Store, Nationwide Support (M)
+### 2. System Scope Expansion (New)
+**2.1 Multi-Store, Nationwide Support** (M)
 The platform must support multiple stores across the United States.
 Each store operates independently while participating in regional coordination.
 
-2.2 Decentralized Architecture (M)
+**2.2 Decentralized Architecture** (M)
 There is no central server controlling all stores.
 Stores communicate directly with:
 Other local stores in the same region
 Regional supply hubs
 Regional data synchronization must tolerate intermittent connectivity.
 
-3. Supply & Logistics System (New)
-3.1 Supply Hubs (M)
+### 3. Supply & Logistics System (New)
+**3.1 Supply Hubs** (M)
 The system must support 7 supply hubs, each assigned to a region:
 
 Region A: Chicago, IL
@@ -49,22 +50,22 @@ Supply hubs can deliver to:
 Stores in their own region
 Stores in other regions within 1000 miles
 
-3.2 Supply Coordination (M)
+**3.2 Supply Coordination** (M)
 Managers and logistics administrators must coordinate supplies using:
 Local store inventory
 Shared local suppliers
 At least one assigned regional supply hub
 AI-assisted demand prediction must use historical usage data (CSV-based ingestion supported).
 
-4. Machine Maintenance Tracking (New)
-4.1 Maintenance System (M)
+### 4. Machine Maintenance Tracking (New)
+**4.1 Maintenance System** (M)
 Each store must track:
 Machine type
 Operational start date
 Maintenance status
 Maintenance history
 
-4.2 Maintenance Status Types (M)
+**4.2 Maintenance Status Types** (M)
 Supported machine states:
 
 normal
@@ -75,7 +76,7 @@ error
 out-of-order
 schedule-service
 
-4.3 Repair Optimization (S)
+**4.3 Repair Optimization** (S)
 Repair schedules must be optimized to:
 Minimize travel time
 Respect maximum time between service visits
@@ -84,8 +85,8 @@ Prevent machines in warning state from exceeding allowed operational time
 
 ## Nonfunctional Requirements
 
-6. Dashboards (Updated)
-6.1 Required Dashboards (M)
+### 6. Dashboards (Updated)
+**6.1 Required Dashboards** (M)
 
 Logistics Manager Dashboard
 Regional supply levels
@@ -108,15 +109,15 @@ User management
 Store performance metrics
 System-wide reports (super_admin only)
 
-7. Test Data Requirements (New)
-7.1 Supply Hubs (M)
+### 7. Test Data Requirements (New)
+**7.1 Supply Hubs** (M)
 Create 7 supply hubs, one per region (A–G)
 
-7.2 Stores (M)
+**7.2 Stores** (M)
 Region C: 20 stores
 Neighboring regions (within 200 miles): minimum 5 stores per region
 
-7.3 Roles & Supplies (M)
+**7.3 Roles & Supplies** (M)
 Assign:
 One logistics_manager per hub (Regions A–G)
 One repair_staff for Region C
@@ -128,16 +129,16 @@ Machine status histories
 
 ## Business Requirements
 
-3. Supply & Logistics System (New)
-3.2 Supply Coordination (M)
+### 8. Supply & Logistics System (New)
+**8.1 Supply Coordination** (M)
 Managers and logistics administrators must coordinate supplies using:
 Local store inventory
 Shared local suppliers
 At least one assigned regional supply hub
 AI-assisted demand prediction must use historical usage data (CSV-based ingestion supported).
 
-4. Machine Maintenance Tracking (New)
-4.3 Repair Optimization (S)
+### 9. Machine Maintenance Tracking (New)
+**9.1 Repair Optimization** (S)
 Repair schedules must be optimized to:
 Minimize travel time
 Respect maximum time between service visits
@@ -146,8 +147,8 @@ Prevent machines in warning state from exceeding allowed operational time
 
 ## User Requirements
 
-5. User Roles & Permissions (Updated)
-5.1 New Roles
+### 10. User Roles & Permissions (Updated)
+**10.1 New Roles**
 
 logistics_manager (M)
 Manage supply distribution within a region
@@ -167,7 +168,7 @@ Status date
 super_admin (M)
 Full access to all store locations and data nationwide
 
-5.2 Updated Existing Roles
+**10.2 Updated Existing Roles**
 
 admin (M)
 Access limited to own store
@@ -191,9 +192,22 @@ Preferences and order history retained
 general_user (M)
 Can place one-time orders
 No data persistence
+
+### Use Case Stories
+
+**Logistics Manager**
+- *(M)* As a Logistics Manager, I want to view real-time inventory levels across all stores in my assigned region so that I can make informed supply distribution decisions.
+- *(M)* As a Logistics Manager, I want to assign deliveries from my regional supply hub to stores within and outside my region (up to 1000 miles) so that supply shortages are prevented.
+- *(M)* As a Logistics Manager, I want to coordinate supply transfers between local stores and shared regional suppliers so that demand spikes can be handled without over-reliance on a single hub.
+- *(M)* As a Logistics Manager, I want to import historical supply usage data from CSV files so that AI-assisted demand prediction can generate accurate forecasts.
+- *(M)* As a Logistics Manager, I want to generate and update supply schedules for stores in my region so that deliveries align with predicted demand and inventory thresholds.
+- *(S)* As a Logistics Manager, I want to receive AI-generated alerts when projected demand exceeds available regional supply so that I can proactively adjust delivery plans.”
+- *(S)* As a Logistics Manager, I want to visualize hub-to-store routing on a regional dashboard so that I can optimize delivery efficiency and reduce travel distance.
+- *(C)* As a Logistics Manager, I want to compare historical demand forecasts against actual supply usage so that I can evaluate the accuracy of AI predictions.
+- *(W)* As a Logistics Manager, I want to export supply schedules and demand reports to CSV so that I can share them with external logistics partners if needed.
 ---
 
-## 8. Out of Scope (Unchanged – W)
+## 11. Out of Scope (Unchanged – W)
 - Global trend-based inventory forecasting
 - Shared user accounts
 - Multi-location support in v1 (removed – now supported)
@@ -204,5 +218,5 @@ No data persistence
 
 ---
 
-## 9. Summary
+## 12. Summary
 This update expands CodePop from a single-location system into a **nationwide, decentralized, AI-driven platform** with logistics coordination, maintenance optimization, and role-based operational control—while preserving the original customer-focused ordering experience.
