@@ -147,51 +147,59 @@ Prevent machines in warning state from exceeding allowed operational time
 
 ## User Requirements
 
+**Updated Preferences**: (M) Users should be able to save their preffered location and get suggested previous and new drinks based on existing user preferences.
+
+**General User Updates**: (M) General users (users with no account) should be able to order drinks on a single time basis without needing and account. While having no data or preferences saved in the system.
+
+**Multi-store syncing**: (M) Users should be able to access their information from any store. And have the software suggest which location to buy from based on saved preferencesf and current location.
+
 ### 10. User Roles & Permissions (Updated)
 **10.1 New Roles**
 
-logistics_manager (M)
-Manage supply distribution within a region
-Coordinate deliveries between hubs and stores
-Analyze supply usage via AI using CSV imports
-Create and update supply schedules
-
-repair_staff (M)
-Manage machine repair schedules for assigned stores
-Import repair schedules from CSV files containing:
-Store address
-Machine type (enumerated)
-Operational start date
-Machine status
-Status date
-
-super_admin (M)
-Full access to all store locations and data nationwide
+- `logistics_manager`
+  - Manage supply distribution within a region
+  - Coordinate deliveries between hubs and stores
+  - Analyze supply usage via AI using CSV imports
+- `repair_staff`
+  - Manage repair schedules for machines they are in charge of at store location they manage
+  - Import repair schedules from CSV file containing:
+    - store location : address field
+    - machine type : enumearted code of machine types
+    - machine status : one of:
+      - `normal` : machine operating normally
+      - `repair-start` : servicing started; machine is off-line
+      - `repair-end` : servicing finished
+      - `warning` : non-critical issue; operational but needs repair soon
+      - `error` : critical issue; requires repair within a week
+      - `out-of-order` : not operational
+      - `schedule-service` : operational but needs scheduled maintenance within one month
+    - status date : date when the status was recorded
+  - Optimize repair schedule to minimize travel time, with constraints including:
+    - maximum time allowed between service visits
+    - macimum time a machine with a warning can remain operational before shutting down without service
+- `super_admin`
+  - Can access data for any store locations
 
 **10.2 Updated Existing Roles**
-
-admin (M)
-Access limited to own store
-Manage user accounts
-Unlock, disable, and delete users
-Grant manager permissions
-
-manager (M)
-Access limited to own store
-View inventory levels
-View payments and revenue reports
-Receive AI-generated inventory alerts
-
-account_user (M)
-Can order from any store
-Suggested store based on:
-Current location + pickup time, or
-Preferred store
-Preferences and order history retained
-
-general_user (M)
-Can place one-time orders
-No data persistence
+- `admin`
+  - Can access their own store information only, with the same access level
+  - Has access to manage user account data
+  - Has ability to update/remove/unlock user accounts
+  - Has the ability to add manager accounts/grant permissions
+- `manager`
+  - Can access their own store information only, with the same access level
+  - Has access to data such as stock inventory
+  - Has access to user payments
+  - Has access to revenue reports
+- `account_user`
+  - Can access their own information from any store
+  - Software will suggest which location to buy from based on:
+    - the user's current location and preferred pickup time, or
+    - the uers's preferred location
+  - Software remembers previous orders and suggests new drinks based on preferences
+- `general_user`
+  - User can use the app to order drinks on a single time basis without creating an account
+  - This user's data and preferences aren't saved in the system
 
 ### Use Case Stories
 
