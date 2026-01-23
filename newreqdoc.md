@@ -205,6 +205,60 @@ No data persistence
 - *(S)* As a Logistics Manager, I want to visualize hub-to-store routing on a regional dashboard so that I can optimize delivery efficiency and reduce travel distance.
 - *(C)* As a Logistics Manager, I want to compare historical demand forecasts against actual supply usage so that I can evaluate the accuracy of AI predictions.
 - *(W)* As a Logistics Manager, I want to export supply schedules and demand reports to CSV so that I can share them with external logistics partners if needed.
+
+**Account user stories:**
+- *(M)* As an account user I want to be able to easily and securely sign in to my account to access my drink history and order drinks 
+- *(M)* As an account user, I want to know that my private data such as payment information and geolocation is being protected if I choose to share it. 
+- *(S)* As an account user, I want to have drinks recommended to me based on my preferences.
+- *(M)* As an account user, I want the app to be visually pleasing.
+- *(M)* As an account user I want to be able to see all possible combinations of syrups, sodas, and add-ins so I can craft my drink. 
+- *(M)* As an account user, I want to be able to save my favorite drinks so I can order them easily in the future
+- *(M)* As an account user, I want to be able to have my drink fresh and ready for me right as I arrive to pick it up. 
+- *(S)* As an account user, I want the option to deny access to my geolocation and instead choose a time for my drink to be ready. 
+- *(M)* As an account user, I want to receive a notification when my soda is ready to pick up. 
+- *(M)* As an account user, I want to be able to add payment options to my account so I can pay through the app when I order my drinks.
+- *(M)* As an account user, I want to be refunded if I cancel my drink order. 
+- *(C)* As an account user, I want to be able to rate the sodas I have tried out of 5.
+- *(C)* As an account user, I want AI to use my drink ratings to recommend  future soda combinations.
+- *(M)* As an account user, I want to be able to pay for my drink on the application when I order it.
+- *(C)* As an account user, I want to be able to lodge complaints. 
+- *(M)* As an account user, I want to be able to add and remove preferences
+- *(M)* As an account user, I want to be able to dislike ingredients so they aren’t recommended to me. 
+- *(C)* As an account user, I want to be able to share my drinks on social media. 
+- *(S)* As an account user, I want access to a seasonal drink menu for inspiration when making my own drinks. 
+
+**General user stories:**
+- *(M)* As a general user, I want to be able to order drinks from the soda shop without having an account
+- *(M)* As a general user I want to be able to create personalized drinks to order
+- *(S)* As a general user, I want to be able to see drink suggestions based on popular drinks so I have ideas to order
+- *(M)* As a general user I want to be able to see all possible combinations of syrups, sodas, and add-ins so I can craft my drink.
+- *(S)* As a general user, I want to receive a notification when my soda is ready to pick up.
+- *(M)* As a general user, I want to be able to receive a refund if I cancel my order. 
+- *(S)* As an account user, I want access to a seasonal drink menu for inspiration when making my own drinks. 
+
+**Admin User stories**
+- *(M)* As an admin, I want to be able to keep track of inventory.
+- *(M)* As an admin, I want to be able to access certain user data such as the number of user accounts.
+- *(M)* As an admin, I want to be able to see and keep track of the cost of inventory and maintenance of the shop.
+- *(M)* As an admin, I want to be able to see how much money the shop is bringing in.
+- *(M)* As an admin, I want to be able to see general and account user complaints.
+- *(S)* As an admin, I want to receive all available data in the form of easily understandable and regular reports.
+- *(M)* As an admin, I want the ability to manage user accounts. This includes overriding locked accounts, disabling accounts, and deleting user accounts.
+- *(M)* As an admin, I want to be able to add permissions to manager accounts.
+
+**Manager User stories**
+- *(S)* As a manager, I want to be able to see store revenue reports from the database.
+- *(M)* As a manager, I want to be notified when inventory is low. 
+- *(S)* As a manager, I want to be able to order more inventory when it is low.
+- *(M)* As a manager, I want to be able to see inventory and usage data pertinent to running the store in the form of regular reports.
+
+**General system stories**
+- *(M)* As a user, I want all my options to be easily accessible and useful. 
+- *(M)* As a user, I want simple and user-friendly options for making soda combinations, rating my sodas, and ordering sodas.
+- *(M)* As a user, I want a safe and secure platform that ensures my data, especially my geolocation and email, is protected. 
+- *(S)* As a user, I want the platform to be accessible according to WCAG standards of at least an “A”. 
+- *(S)* As a user, I want a place I can lodge complaints and get helpful feedback.
+
 ---
 
 ## 11. Out of Scope (Unchanged – W)
