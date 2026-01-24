@@ -129,20 +129,189 @@ Machine status histories
 
 ## Business Requirements
 
-### 8. Supply & Logistics System (New)
-**8.1 Supply Coordination** (M)
-Managers and logistics administrators must coordinate supplies using:
-Local store inventory
-Shared local suppliers
-At least one assigned regional supply hub
-AI-assisted demand prediction must use historical usage data (CSV-based ingestion supported).
+### Operational Philosophy & Store Model
 
-### 9. Machine Maintenance Tracking (New)
-**9.1 Repair Optimization** (S)
-Repair schedules must be optimized to:
-Minimize travel time
-Respect maximum time between service visits
-Prevent machines in warning state from exceeding allowed operational time
+**Minimal Human Intervention** *(M)*
+The CodePop business model prioritizes automation to reduce operational costs and increase efficiency:
+- Stores operate primarily through robotic drink preparation with no on-site staff required at most locations.
+- A single manager must be able to effectively oversee multiple store locations remotely.
+- AI systems handle inventory management, order processing, supply coordination, and customer support to minimize manual intervention.
+
+**Multi-Store Nationwide Expansion** *(M)*
+The software must support business operations across multiple stores throughout the United States:
+- Each store operates as an independent unit while participating in regional coordination networks.
+- Business processes must scale from a single location to hundreds of stores without architectural redesign.
+- Regional groupings enable efficient supply chain management and localized decision-making.
+
+**Decentralized Business Operations** *(M)*
+The business model does not rely on a centralized headquarters or single point of control:
+- Store locations communicate directly with other local stores in their region for operational coordination.
+- No central server manages day-to-day operations, ensuring business continuity if any single node fails.
+- Regional autonomy allows for localized pricing, promotions, and inventory decisions within corporate guidelines.
+
+---
+
+### Revenue & Payment Systems
+
+**Payment Processing** *(M)*
+The application must support complete financial transaction capabilities:
+- Process payments securely at the time an order is placed through the app or website.
+- Support refund processing when orders are canceled before drink arrives.
+- Track revenue independently for each store location to enable financial reporting and performance analysis.
+
+**Revenue Tracking & Reporting** *(M)*
+Each store location must have comprehensive revenue visibility:
+- Real-time revenue tracking accessible to managers and administrators.
+- Historical revenue data for trend analysis and business planning.
+- Per-location financial performance metrics for multi-store comparison.
+
+**Saved Payment Methods** *(C)*
+To streamline repeat purchases and improve customer experience:
+- Users may optionally save credit/debit card information for future transactions.
+- Saved payment data must be encrypted and stored according to PCI-DSS compliance standards.
+
+---
+
+### Supply Chain & Logistics Management
+
+**Regional Supply Hub Network** *(M)*
+The business operates through a network of seven regional supply hubs:
+- Each hub serves as the primary distribution center for stores within its assigned region.
+- Hubs can fulfill supply requests from stores in other regions within a 1000-mile radius to handle demand spikes or shortages.
+- Hub locations: Chicago, IL (Region A); New Jersey, NY (Region B); Logan, UT (Region C); Dallas, TX (Region D); Atlanta, GA (Region E); Phoenix, AZ (Region F); Boise, ID (Region G).
+
+**Supply Coordination Strategy** *(M)*
+Store managers and logistics administrators must coordinate supplies through multiple channels:
+- Local store inventory utilization before requesting external supplies.
+- Shared supplies from local suppliers within the same region.
+- Regional supply hub fulfillment managed by logistics_manager role personnel.
+- AI-assisted demand prediction using historical usage data from CSV file imports to optimize ordering schedules.
+
+**Inventory Tracking System** *(M)*
+A comprehensive system to monitor and manage ingredient levels at each location:
+- Remote visibility into flavor syrup, soda base, cream, and add-in levels at all store locations.
+- Automated warnings when ingredient levels fall below configurable thresholds.
+- Manager notifications with recommended order quantities based on current usage rates.
+- AI analytics that learn usage patterns per location and provide estimated supply requirements for monthly ordering cycles.
+
+**Order Pickup Tracking** *(S)*
+To prevent cooler capacity issues and maintain drink quality:
+- Track elapsed time for each completed order waiting in pickup coolers.
+- Automated alerts when orders exceed configurable wait time thresholds.
+- Systematic disposal of stale orders to maintain cooler availability for new orders.
+
+---
+
+### Machine Maintenance & Equipment Management
+
+**Maintenance Schedule Tracking** *(M)*
+The software must track machine maintenance schedules at each store location:
+- Record machine type, operational start date, and complete maintenance history.
+- Track current maintenance status for all equipment across all locations.
+- Enable repair_staff role personnel to manage repair schedules for machines at locations they are assigned to.
+
+**Maintenance Status Management** *(M)*
+The system must support comprehensive machine status tracking with the following states:
+- **normal**: Machine operating within specifications.
+- **repair-start**: Servicing has begun; machine is offline.
+- **repair-end**: Servicing completed; machine returned to operation.
+- **warning**: Non-critical issue identified; machine operational but requires repair soon.
+- **error**: Critical issue identified; requires repair within one week.
+- **out-of-order**: Machine not operational; immediate attention required.
+- **schedule-service**: Operational but requires scheduled preventive maintenance within one month.
+
+**Repair Schedule Optimization** *(S)*
+Repair schedules must be optimized to reduce operational costs and maximize equipment uptime:
+- Minimize repair staff travel time through intelligent route planning.
+- Respect maximum allowable time between service visits for preventive maintenance.
+- Ensure machines in warning state do not exceed allowable operational time before mandatory shutdown or service.
+- Support CSV import of repair schedules containing store address, machine type, operational date, machine status, and status date.
+
+---
+
+### Management Dashboards & Business Intelligence
+
+**Manager Dashboard** *(M)*
+A comprehensive interface for store managers to monitor and manage their location(s):
+- Inventory grid displaying all available flavors and current levels with sorting capabilities.
+- Cooler status display showing occupancy and wait times for pending orders.
+- Order tracking for past, current, and scheduled future orders.
+- Revenue information and fulfillment statistics for performance monitoring.
+- Average pickup wait times and order-to-pickup duration metrics.
+
+**Logistics Manager Dashboard** *(M)*
+A specialized interface for logistics_manager role personnel to coordinate regional supply operations:
+- Real-time regional supply levels across all stores in assigned region.
+- Hub-to-store routing visualization for delivery planning.
+- AI-generated demand forecasts based on historical usage patterns.
+- Supply schedule management and delivery coordination tools.
+
+**Repair Staff Dashboard** *(M)*
+A specialized interface for repair_staff role personnel to manage equipment maintenance:
+- Machine status overview organized by store location.
+- Repair schedule calendar with priority indicators.
+- Travel-optimized task lists for efficient service routing.
+- Maintenance history and status update capabilities.
+
+**Admin & Super Admin Dashboards** *(M)*
+Comprehensive management interfaces for administrative personnel:
+- User account management (create, update, disable, unlock, delete).
+- Store performance metrics and comparative analytics.
+- System-wide reports and data access (super_admin only).
+
+---
+
+### Customer Engagement & Loyalty
+
+**AI Customer Support** *(S)*
+To reduce customer service costs while maintaining satisfaction:
+- AI-powered chatbot to guide customers through common issues and questions.
+- Automated complaint intake and initial triage to reduce human intervention.
+- Continuous learning from customer interactions to improve response quality.
+
+**Member Loyalty Program** *(C)*
+To encourage repeat business and increase customer lifetime value:
+- Points accumulation system tied to purchase amounts.
+- Redeemable rewards for free items or discounts once point thresholds are reached.
+- Loyalty status visible within user accounts.
+
+**Social Media Integration** *(C)*
+To generate organic marketing and brand awareness:
+- In-app sharing functionality to post favorite drinks to social platforms (X, Instagram, Facebook).
+- User-generated content to promote CodePop through personal networks.
+
+---
+
+### Business Requirements MoSCoW Summary
+
+**Must Have (M):**
+- Minimal human intervention operational model with robotic drink preparation
+- Multi-store nationwide support with regional coordination
+- Decentralized architecture with no single point of failure
+- Complete payment processing with refund capabilities
+- Per-location revenue tracking and reporting
+- Seven regional supply hubs with cross-region delivery capability
+- AI-assisted supply coordination using CSV-based historical data
+- Comprehensive inventory tracking with low-stock warnings
+- Machine maintenance schedule tracking at all locations
+- Machine status management with defined operational states
+- Manager, logistics manager, repair staff, and admin dashboards
+
+**Should Have (S):**
+- Order pickup tracking with automated stale order disposal
+- Repair schedule optimization for travel efficiency and preventive maintenance compliance
+- AI customer support chatbot for issue resolution
+
+**Could Have (C):**
+- Saved payment methods for streamlined checkout
+- Member loyalty program with points and rewards
+- Social media sharing integration for organic marketing
+
+**Won't Have (W):**
+- Global trend-based inventory forecasting (unreliable external data)
+- Shared user accounts across multiple individuals
+- Stored-value wallets or gift card systems
+- Cash payment processing at locations
 
 
 ## User Requirements
