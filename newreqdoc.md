@@ -24,76 +24,117 @@ Requirements are categorized as:
 
 **2.1.1 Multi-Store, Nationwide Support (M)**
 
-The platform must support multiple stores across the United States. Each store operates independently while participating in regional coordination.
+The CodePop platform must support deployment across multiple stores distributed throughout the United States. Each store operates as an independent unit while still participating in regional coordination for supply, logistics, and data synchronization. Stores must be able to function autonomously in day-to-day operations, even if other stores or regional systems are unavailable.
+
+The system must allow for:
+- Independent store configuration (inventory, machines, staff roles)
+- Regional grouping of stores for supply and logistics coordination
+- Expansion to new stores without requiring downtime or reconfiguration of existing locations
+- Store-specific operational parameters and customization
 
 **2.1.2 Decentralized Architecture (M)**
 
-There is no central server controlling all stores. Stores communicate directly with:
+The system must operate using a decentralized architecture. There is no single central server that controls all stores nationwide. Instead:
+- Each store maintains its own local operational data
+- Stores communicate directly with other stores in the same region as needed
+- Stores communicate directly with regional supply hubs
+- Regional data synchronization must tolerate intermittent or unstable connectivity
 
-- Other local stores in the same region
-- Regional supply hubs
-
-Regional data synchronization must tolerate intermittent connectivity.
+In the event of connectivity loss:
+- Local store operations (ordering, inventory tracking, machine operation) must continue uninterrupted
+- Synchronization of data (inventory usage, maintenance logs, demand metrics) must resume automatically once connectivity is restored
+- Conflicts during synchronization must be resolved using timestamp-based or priority-based reconciliation rules
 
 ### 2.2 Supply & Logistics System
 
 **2.2.1 Supply Hubs (M)**
 
-The system must support 7 supply hubs, each assigned to a region:
+The system must support seven (7) regional supply hubs, each assigned to a specific geographic region:
 
 - **Region A:** Chicago, IL
-- **Region B:** New Jersey / NY
+- **Region B:** New Jersey / New York
 - **Region C:** Logan, UT
 - **Region D:** Dallas, TX
 - **Region E:** Atlanta, GA
 - **Region F:** Phoenix, AZ
 - **Region G:** Boise, ID
 
-Supply hubs can deliver to:
+Each supply hub is responsible for managing and distributing ingredients, machine parts, and other consumables required for store operations.
 
-- Stores in their own region
-- Stores in other regions within 1000 miles
+Supply hubs must be capable of delivering to:
+- Stores located within their assigned region
+- Stores located in other regions, provided the destination store is within a 1000-mile delivery radius
+
+The system must allow hubs to manage:
+- Current stock levels
+- Outgoing and incoming shipments
+- Estimated delivery times
+- Cross-region fulfillment when a closer hub lacks sufficient inventory
 
 **2.2.2 Supply Coordination (M)**
 
-Managers and logistics administrators must coordinate supplies using:
-
-- Local store inventory
-- Shared local suppliers
+Managers and logistics administrators must be able to coordinate supplies through multiple channels:
+- Local store inventory tracking
+- Shared local suppliers (e.g., regional syrup or CO₂ vendors)
 - At least one assigned regional supply hub
 
-AI-assisted demand prediction must use historical usage data (CSV-based ingestion supported).
+The platform must provide a unified interface for viewing:
+- Current store inventory
+- In-transit shipments
+- Hub availability and fulfillment capacity
+- Supplier lead times
+
+AI-assisted demand prediction must be used to forecast future supply needs. This prediction system must:
+- Use historical usage data from individual stores and regions
+- Support CSV-based data ingestion for historical records and external forecasting inputs
+- Continuously update forecasts based on real-time usage trends
+
+The system must generate actionable recommendations, such as:
+- Suggested reorder quantities
+- Optimal sourcing location (local supplier vs. supply hub)
+- Recommended reorder timing to prevent shortages
 
 ### 2.3 Machine Maintenance Tracking
 
-**2.3.1 Maintenance System (M)**
+**2.3.1 Maintenance System Overview (M)**
 
-Each store must track:
-
-- Machine type
+Each store must track all operational machines used in drink preparation and fulfillment. For every machine, the system must store:
+- Machine type and model
 - Operational start date
-- Maintenance status
-- Maintenance history
+- Current maintenance status
+- Complete maintenance and repair history
+
+This information must be available to:
+- Store managers
+- Regional maintenance coordinators
+- Authorized logistics or technical administrators
 
 **2.3.2 Maintenance Status Types (M)**
 
-Supported machine states:
+The system must support the following machine states:
 
-- **normal:** Operating within expected parameters
-- **warning:** Operational but showing early failure indicators
-- **repair-start:** Entered active repair state
-- **repair-end:** Repair completed, ready for operation
-- **error:** Fault requiring attention
-- **out-of-order:** Not operational
-- **schedule-service:** Due for routine/preventive maintenance
+- **normal:** Machine is operating within expected parameters
+- **warning:** Machine is operational but exhibiting early indicators of potential failure
+- **repair-start:** Machine has entered an active repair state
+- **repair-end:** Repair has been completed and machine is ready for operation
+- **error:** Machine has encountered a fault requiring attention
+- **out-of-order:** Machine is not operational and cannot be used
+- **schedule-service:** Machine is due for routine or preventive maintenance
+
+Transitions between states must be logged automatically with timestamps and responsible personnel (when applicable).
 
 **2.3.3 Repair Optimization (S)**
 
-Repair schedules must be optimized to:
+The system should optimize repair and maintenance schedules using AI-assisted planning. Optimization objectives include:
+- Minimizing total technician travel time across stores
+- Respecting maximum allowable time between service visits for each machine type
+- Preventing machines in a **warning** state from exceeding safe operational thresholds
 
-- Minimize travel time
-- Respect maximum time between service visits
-- Prevent machines in warning state from exceeding allowed operational time
+The optimization system should consider:
+- Geographic location of stores
+- Technician availability
+- Severity and priority of machine issues
+- Historical failure patterns
 
 
 ## Nonfunctional Requirements
