@@ -85,8 +85,8 @@ Prevent machines in warning state from exceeding allowed operational time
 
 ## Nonfunctional Requirements
 
-### 6. Dashboards (Updated)
-**6.1 Required Dashboards** (M)
+### 5. Dashboards (Updated)
+**5.1 Required Dashboards** (M)
 
 Logistics Manager Dashboard
 Regional supply levels
@@ -109,15 +109,15 @@ User management
 Store performance metrics
 System-wide reports (super_admin only)
 
-### 7. Test Data Requirements (New)
-**7.1 Supply Hubs** (M)
+### 6. Test Data Requirements (New)
+**6.1 Supply Hubs** (M)
 Create 7 supply hubs, one per region (A–G)
 
-**7.2 Stores** (M)
+**6.2 Stores** (M)
 Region C: 20 stores
 Neighboring regions (within 200 miles): minimum 5 stores per region
 
-**7.3 Roles & Supplies** (M)
+**6.3 Roles & Supplies** (M)
 Assign:
 One logistics_manager per hub (Regions A–G)
 One repair_staff for Region C
@@ -129,16 +129,16 @@ Machine status histories
 
 ## Business Requirements
 
-### 8. Supply & Logistics System (New)
-**8.1 Supply Coordination** (M)
+### 7. Supply & Logistics System (New)
+**7.1 Supply Coordination** (M)
 Managers and logistics administrators must coordinate supplies using:
 Local store inventory
 Shared local suppliers
 At least one assigned regional supply hub
 AI-assisted demand prediction must use historical usage data (CSV-based ingestion supported).
 
-### 9. Machine Maintenance Tracking (New)
-**9.1 Repair Optimization** (S)
+### 8. Machine Maintenance Tracking (New)
+**8.1 Repair Optimization** (S)
 Repair schedules must be optimized to:
 Minimize travel time
 Respect maximum time between service visits
@@ -147,8 +147,8 @@ Prevent machines in warning state from exceeding allowed operational time
 
 ## User Requirements
 
-### 10. User Roles & Permissions (Updated)
-**10.1 New Roles**
+### 9. User Roles & Permissions (Updated)
+**9.1 New Roles**
 
 logistics_manager (M)
 Manage supply distribution within a region
@@ -168,7 +168,7 @@ Status date
 super_admin (M)
 Full access to all store locations and data nationwide
 
-**10.2 Updated Existing Roles**
+**9.2 Updated Existing Roles**
 
 admin (M)
 Access limited to own store
@@ -204,28 +204,47 @@ No data persistence
 - *(S)* As a Logistics Manager, I want to receive AI-generated alerts when projected demand exceeds available regional supply so that I can proactively adjust delivery plans.”
 - *(S)* As a Logistics Manager, I want to visualize hub-to-store routing on a regional dashboard so that I can optimize delivery efficiency and reduce travel distance.
 - *(C)* As a Logistics Manager, I want to compare historical demand forecasts against actual supply usage so that I can evaluate the accuracy of AI predictions.
-- *(W)* As a Logistics Manager, I want to export supply schedules and demand reports to CSV so that I can share them with external logistics partners if needed.
+- *(C)* As a Logistics Manager, I want to export supply schedules and demand reports to CSV so that I can share them with external logistics partners if needed.
+- *(S)* As a Logistics Manager, I want to recieve notifications when inventory is low so that I can stay on top of re-ordering supplies
+
+**Repair Staff**
+- *(M)* As a repair staff member, I want to view all machines assigned to the store locations I manage so that I can monitor their operational status.
+- *(M)* As a repair staff member, I want to import machine repair schedules from a CSV file so that maintenance data can be populated efficiently and consistently.
+- *(M)* As a repair staff member, I want to see the current maintenance status of each machine so that I can prioritize repairs appropriately.
+- *(M)* As a repair staff member, I want to update machine statuses (e.g., warning, error, out-of-order) so that the system reflects real-world conditions.
+- *(M)* As a repair staff member, I want the system to generate an optimized repair schedule that minimizes travel time so that maintenance can be completed efficiently.
+- *(S)* As a repair staff member, I want the system to alert me when a machine in a warning state is approaching its maximum allowed operational time so that I can service it before shutdown.
+- *(S)* As a repair staff member, I want repair schedules to respect maximum time limits between service visits so that machines remain compliant with maintenance requirements.
+- *(C)* As a repair staff member, I want to view historical maintenance records for machines so that I can identify recurring issues.
+- *(W)* As a repair staff member, I want to export repair schedules to a CSV file so that I can share them externally if needed.
+
+**Super Admin**
+- *(M)* As a super admin, I want to access data for any store location so that I can oversee system-wide operations.
+- *(M)* As a super admin, I want to view performance metrics across all stores so that I can evaluate regional and national trends.
+- *(M)* As a super admin, I want to manage user roles and permissions across all store locations so that access control is enforced consistently.
+- *(C)* As a super admin, I want to generate system-wide reports so that I can review overall inventory, revenue, and maintenance performance.
+- *(S)* As a super admin, I want to monitor supply hub activity across all regions so that distribution issues can be identified early.
+- *(S)* As a super admin, I want to view any page that anyone else has access to so that I can check up on everything.
 
 **Account user stories:**
-- *(M)* As an account user I want to be able to easily and securely sign in to my account to access my drink history and order drinks 
-- *(M)* As an account user, I want to know that my private data such as payment information and geolocation is being protected if I choose to share it. 
+- *(M)* As an account user, I want to be able to easily and securely sign in to my account to access my drink history and order drinks
+- *(M)* As an account user, I want to know that my private data such as payment information and geolocation is being protected if I choose to share it.
 - *(S)* As an account user, I want to have drinks recommended to me based on my preferences.
-- *(M)* As an account user, I want the app to be visually pleasing.
-- *(M)* As an account user I want to be able to see all possible combinations of syrups, sodas, and add-ins so I can craft my drink. 
+- *(M)* As an account user, I want to be able to see all possible combinations of syrups, sodas, and add-ins so I can craft my drink.
 - *(M)* As an account user, I want to be able to save my favorite drinks so I can order them easily in the future
-- *(M)* As an account user, I want to be able to have my drink fresh and ready for me right as I arrive to pick it up. 
-- *(S)* As an account user, I want the option to deny access to my geolocation and instead choose a time for my drink to be ready. 
-- *(M)* As an account user, I want to receive a notification when my soda is ready to pick up. 
+- *(M)* As an account user, I want to be able to have my drink fresh and ready for me right as I arrive to pick it up.
+- *(S)* As an account user, I want the option to deny access to my geolocation and instead choose a time for my drink to be ready.
+- *(M)* As an account user, I want to receive a notification when my soda is ready to pick up.
 - *(M)* As an account user, I want to be able to add payment options to my account so I can pay through the app when I order my drinks.
-- *(M)* As an account user, I want to be refunded if I cancel my drink order. 
+- *(M)* As an account user, I want to be refunded if I cancel my drink order.
 - *(C)* As an account user, I want to be able to rate the sodas I have tried out of 5.
-- *(C)* As an account user, I want AI to use my drink ratings to recommend  future soda combinations.
+- *(C)* As an account user, I want AI to use my drink ratings to recommend future soda combinations.
 - *(M)* As an account user, I want to be able to pay for my drink on the application when I order it.
-- *(C)* As an account user, I want to be able to lodge complaints. 
+- *(C)* As an account user, I want to be able to lodge complaints.
 - *(M)* As an account user, I want to be able to add and remove preferences
-- *(M)* As an account user, I want to be able to dislike ingredients so they aren’t recommended to me. 
-- *(C)* As an account user, I want to be able to share my drinks on social media. 
-- *(S)* As an account user, I want access to a seasonal drink menu for inspiration when making my own drinks. 
+- *(M)* As an account user, I want to be able to dislike ingredients so they aren’t recommended to me.
+- *(C)* As an account user, I want to be able to share my drinks on social media.
+- *(C)* As an account user, I want access to a seasonal drink menu for inspiration when making my own drinks.
 
 **General user stories:**
 - *(M)* As a general user, I want to be able to order drinks from the soda shop without having an account
@@ -234,7 +253,6 @@ No data persistence
 - *(M)* As a general user I want to be able to see all possible combinations of syrups, sodas, and add-ins so I can craft my drink.
 - *(S)* As a general user, I want to receive a notification when my soda is ready to pick up.
 - *(M)* As a general user, I want to be able to receive a refund if I cancel my order. 
-- *(S)* As an account user, I want access to a seasonal drink menu for inspiration when making my own drinks. 
 
 **Admin User stories**
 - *(M)* As an admin, I want to be able to keep track of inventory.
@@ -257,11 +275,11 @@ No data persistence
 - *(M)* As a user, I want simple and user-friendly options for making soda combinations, rating my sodas, and ordering sodas.
 - *(M)* As a user, I want a safe and secure platform that ensures my data, especially my geolocation and email, is protected. 
 - *(S)* As a user, I want the platform to be accessible according to WCAG standards of at least an “A”. 
-- *(S)* As a user, I want a place I can lodge complaints and get helpful feedback.
+- *(C)* As a user, I want a place I can lodge complaints and get helpful feedback.
 
 ---
 
-## 11. Out of Scope (Unchanged – W)
+## 10. Out of Scope (Unchanged – W)
 - Global trend-based inventory forecasting
 - Shared user accounts
 - Multi-location support in v1 (removed – now supported)
@@ -269,8 +287,3 @@ No data persistence
 - Stored-value wallets
 - Gift cards
 - Cash payments
-
----
-
-## 12. Summary
-This update expands CodePop from a single-location system into a **nationwide, decentralized, AI-driven platform** with logistics coordination, maintenance optimization, and role-based operational control—while preserving the original customer-focused ordering experience.
