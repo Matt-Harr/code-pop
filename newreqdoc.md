@@ -16,71 +16,84 @@ Requirements are categorized as:
 - **C** – Could Have  
 - **W** – Won’t Have  
 
-# Requirements
 ---
 
-## Functional Requirements 
+## 2. Functional Requirements
 
-### 2. System Scope Expansion (New)
-**2.1 Multi-Store, Nationwide Support** (M)
-The platform must support multiple stores across the United States.
-Each store operates independently while participating in regional coordination.
+### 2.1 System Scope Expansion
 
-**2.2 Decentralized Architecture** (M)
-There is no central server controlling all stores.
-Stores communicate directly with:
-Other local stores in the same region
-Regional supply hubs
+**2.1.1 Multi-Store, Nationwide Support (M)**
+
+The platform must support multiple stores across the United States. Each store operates independently while participating in regional coordination.
+
+**2.1.2 Decentralized Architecture (M)**
+
+There is no central server controlling all stores. Stores communicate directly with:
+
+- Other local stores in the same region
+- Regional supply hubs
+
 Regional data synchronization must tolerate intermittent connectivity.
 
-### 3. Supply & Logistics System (New)
-**3.1 Supply Hubs** (M)
+### 2.2 Supply & Logistics System
+
+**2.2.1 Supply Hubs (M)**
+
 The system must support 7 supply hubs, each assigned to a region:
 
-Region A: Chicago, IL
-Region B: New Jersey / NY
-Region C: Logan, UT
-Region D: Dallas, TX
-Region E: Atlanta, GA
-Region F: Phoenix, AZ
-Region G: Boise, ID
+- **Region A:** Chicago, IL
+- **Region B:** New Jersey / NY
+- **Region C:** Logan, UT
+- **Region D:** Dallas, TX
+- **Region E:** Atlanta, GA
+- **Region F:** Phoenix, AZ
+- **Region G:** Boise, ID
 
 Supply hubs can deliver to:
 
-Stores in their own region
-Stores in other regions within 1000 miles
+- Stores in their own region
+- Stores in other regions within 1000 miles
 
-**3.2 Supply Coordination** (M)
+**2.2.2 Supply Coordination (M)**
+
 Managers and logistics administrators must coordinate supplies using:
-Local store inventory
-Shared local suppliers
-At least one assigned regional supply hub
+
+- Local store inventory
+- Shared local suppliers
+- At least one assigned regional supply hub
+
 AI-assisted demand prediction must use historical usage data (CSV-based ingestion supported).
 
-### 4. Machine Maintenance Tracking (New)
-**4.1 Maintenance System** (M)
-Each store must track:
-Machine type
-Operational start date
-Maintenance status
-Maintenance history
+### 2.3 Machine Maintenance Tracking
 
-**4.2 Maintenance Status Types** (M)
+**2.3.1 Maintenance System (M)**
+
+Each store must track:
+
+- Machine type
+- Operational start date
+- Maintenance status
+- Maintenance history
+
+**2.3.2 Maintenance Status Types (M)**
+
 Supported machine states:
 
-normal
-repair-start
-repair-end
-warning
-error
-out-of-order
-schedule-service
+- **normal:** Operating within expected parameters
+- **warning:** Operational but showing early failure indicators
+- **repair-start:** Entered active repair state
+- **repair-end:** Repair completed, ready for operation
+- **error:** Fault requiring attention
+- **out-of-order:** Not operational
+- **schedule-service:** Due for routine/preventive maintenance
 
-**4.3 Repair Optimization** (S)
+**2.3.3 Repair Optimization (S)**
+
 Repair schedules must be optimized to:
-Minimize travel time
-Respect maximum time between service visits
-Prevent machines in warning state from exceeding allowed operational time
+
+- Minimize travel time
+- Respect maximum time between service visits
+- Prevent machines in warning state from exceeding allowed operational time
 
 
 ## Nonfunctional Requirements
