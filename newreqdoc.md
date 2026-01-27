@@ -137,8 +137,6 @@ The optimization system should consider:
 - Historical failure patterns
 
 
-## Nonfunctional Requirements
-
 ### 6. Dashboards (Updated)
 **6.1 Required Dashboards** (M)
 
@@ -165,8 +163,7 @@ System-wide reports (super_admin only)
 
 ### 7. Test Data Requirements (New)
 **7.1 Supply Hubs** (M)
-Create 7 supply hubs, one per region (A–G)
-
+Create 7 supply hubs, one per region (A–G). One supply hub will by managed by a user with the `logistics_manager` role. A supply hub can delivber to any stores within their own region, or other regions within 1000 miles. 
 **7.2 Stores** (M)
 Region C: 20 stores
 Neighboring regions (within 200 miles): minimum 5 stores per region
@@ -179,6 +176,45 @@ Populate:
 Supply inventories
 Maintenance schedules
 Machine status histories
+
+
+## Nonfunctional Requirements
+
+**Decentralized**
+*(M)* There is no central server to manage stores, each store much communicate directly with other stores within their region. 
+
+**Data Consistency** 
+*(M)* With no central server, we must define how stores agree on the state of supplies. 
+
+**Fault Tolerence**
+*(S)* Each store must be able to operate autonomously if its connection to other stores or hubs is severed. Local maintenance tracking and sales must be cached locally and synchronized once the connection is restored.
+
+**Auditability & Logging**
+*(S)* The system must maintain an immutable transaction log at each node. Every action taken by a `logistics_manager` or `repair_staff` must be timestamped and cryptographically signed to prevent tampering.
+
+**Responsive:**
+*(M)* Responsive: The application must be responsive, providing an optimal user experience across a variety of devices, including desktops, tablets, and mobile devices, with seamless adaptation to different screen sizes and orientations.
+
+**Error Messages:**
+*(M)* The application must provide clear, informative error messages for user interactions, invalid inputs, and system errors. Error messages should be concise, easy to understand, and where applicable, include suggestions for resolution.
+
+
+**Scalability:**
+*(M)* The application must be designed to scale efficiently, handling an increasing number of user transactions and data volume without performance degradation, ensuring a consistent user experience. In addition it must not be limited to one store, it must be able to support many stores across the USA.
+***Discoverability / Service Discovery ***
+*(M)* When a new store opens in a region, how do the other stores find out it exists if there is no central registry? The application must include a Service Discovery mechanism. New store nodes must be able to broadcast their presence and "handshake" with existing regional peers automatically upon deployment.
+
+**Cross Browser Capability:**
+*(S)* The application must be compatible with the latest versions of major browsers, including Chrome, Firefox, Safari, and Edge, ensuring consistent functionality and user experience across all platforms.
+
+**Security:**
+*(M)* All sensitive data, including user credentials and payment information, and location data, must be encrypted using industry-standard encryption protocols, such as TLS (Transport Layer Security). Additionally, the application should adhere to best practices for secure coding and data handling to ensure the protection of all user information. All inter-store communications must be digitally signed. Every node must verify the sender's identity using a Public Key Infrastructure (PKI) before processing supply or maintenance updates.
+
+**Accessible:**
+*(S)* The application must comply with Web Content Accessibility Guidelines (WCAG) 2.1 to ensure that users with disabilities can navigate and use the application effectively. This includes avoiding problematic color combinations, such as red and green, and providing alternative text labels for color-based indicators.
+
+**Reporting:**
+*(S)* The system should include features for inventory management. It must automatically notify the manager when items are out of stock and generate detailed reports that can be sent to the developer for further analysis. Additionally, the system should provide the manager with financial reports, offering insights into revenue. This will ensure timely restocking, help in identifying inventory trends or potential issues, and provide a clear understanding of the store's financial performance
 
 
 ## Business Requirements
