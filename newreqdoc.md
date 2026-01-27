@@ -406,51 +406,97 @@ To generate organic marketing and brand awareness:
 
 ## User Requirements
 
+### New User Requirements
+
+**Updated Preferences**: (M) Users should be able to save their preffered location and get suggested new drinks based on existing user preferences and previous orders. This update will allow users to get their drinks from their preffered location or closest location to them. Also allowing users to get better suggested drink based on preferences and previous orders.
+
+**Multi-store syncing**: (M) Users should be able to access their information from any store. And have the software suggest which location to buy from based on saved preferences and current location. This will allow users to pickup their orders from the nearest store. This also expands the availability at which users are able to order and pickup drinks.
+
+**Software Reliability**: (M) The application should work with no central server. Instead the application server should be implemented with a decentralized architecture. With this change the user should still have a reliable experience using the software.
+
+**Sufficient Supplies**: (M) The software must help store managers/administrators with coordinating supplies via supply hubs. To deliver supplies to store locations that are in need of supplies. Ensuring that users will always have sufficient supplies to complete orders. And allow users to order anything.
+
+**Machine Up Time**: (M) The software must keep track of and schedule machine maintenance at each location. Allowing repair staff to perform maintenance on machines that require it. Ensuring that machine down time is kept to a minimum allowing user orders to be completed on time.
+
+### Existing User Requirements
+
+**Account creation:** *(M)* 
+Users must be able to create an account or log in to the application using a combination of a username, password, and email address. This process includes setting up security measures such as email verification and password strength checks to protect user accounts from unauthorized access.
+
+**Profile management:** *(M)* 
+Users should be able to view and edit their profile information after initial sign-up. The profile management system should ensure that updates are reflected in real-time and maintain consistency across all parts of the application, including personalized recommendations and saved preferences.
+
+**Favorite drinks:** *(M)* 
+Users should be able to mark and view their favorite drinks. The application should provide an intuitive interface for users to manage their favorites, and ensure that this list is easily accessible for quick reordering and personalized recommendations.
+
+**Edit preferences:** *(S)* 
+Users should be able to customize their drink preferences. This feature will allow users to refine their experience based on individual tastes, ensuring that drink suggestions and potential promotional offers are tailored to their specific likes and dislikes.
+
+**First-time user tutorial:** *(S)* 
+New users should be guided through a tutorial when they first use the application. The tutorial should not only introduce the basic functionalities but also highlight unique features of the app, ensuring a smooth onboarding experience and helping users get the most out of the application from the start. 
+
+**Choose time for drink to be ready:** *(S)* 
+Users should be able to select a specific time for their drink to be ready. This feature aims to provide convenience for those users who do not want to use geolocation functionality by allowing them to plan ahead and ensure their drink is prepared and available precisely when they want it, reducing wait times and improving overall satisfaction.
+
+**Rate drinks:** *(S)* 
+Users should be able to rate the drinks they purchase. The rating system should enable users to provide detailed feedback on their experience, which will be used to enhance the quality of the drinks and inform other customers about popular choices and potential improvements.
+
+**Chat functionality with AI support staff:** *(C)* 
+Users should be able to chat with an AI-powered support staff for assistance. The AI support staff should be capable of handling a wide range of queries and issues, providing instant help and guidance while learning from reactions to improve its responses over time.
+
+**Loyalty program:** *(C)* 
+A loyalty program should be available to reward repeat customers.This program should offer various incentives such as points, discounts, or exclusive offers, fostering customer retention and encouraging continued patronage by recognizing and rewarding frequent visits.
+
+**Social media functionality:** *(C)* 
+The application should integrate with social media platforms to enhance user engagement and sharing. Users should be able to seamlessly share their experiences and favorite drinks, as well as interact with the soda shop’s social media presence, creating a sense of community and boosting brand visibility.
+
 ### 10. User Roles & Permissions (Updated)
 **10.1 New Roles**
 
-logistics_manager (M)
-Manage supply distribution within a region
-Coordinate deliveries between hubs and stores
-Analyze supply usage via AI using CSV imports
-Create and update supply schedules
-
-repair_staff (M)
-Manage machine repair schedules for assigned stores
-Import repair schedules from CSV files containing:
-Store address
-Machine type (enumerated)
-Operational start date
-Machine status
-Status date
-
-super_admin (M)
-Full access to all store locations and data nationwide
+- `logistics_manager`
+  - Manage supply distribution within a region
+  - Coordinate deliveries between hubs and stores
+  - Analyze supply usage via AI using CSV imports
+- `repair_staff`
+  - Manage repair schedules for machines they are in charge of at store location they manage
+  - Import repair schedules from CSV file containing:
+    - store location : address field
+    - machine type : enumearted code of machine types
+    - machine status : one of:
+      - `normal` : machine operating normally
+      - `repair-start` : servicing started; machine is off-line
+      - `repair-end` : servicing finished
+      - `warning` : non-critical issue; operational but needs repair soon
+      - `error` : critical issue; requires repair within a week
+      - `out-of-order` : not operational
+      - `schedule-service` : operational but needs scheduled maintenance within one month
+    - status date : date when the status was recorded
+  - Optimize repair schedule to minimize travel time, with constraints including:
+    - maximum time allowed between service visits
+    - macimum time a machine with a warning can remain operational before shutting down without service
+- `super_admin`
+  - Can access data for any store locations
 
 **10.2 Updated Existing Roles**
-
-admin (M)
-Access limited to own store
-Manage user accounts
-Unlock, disable, and delete users
-Grant manager permissions
-
-manager (M)
-Access limited to own store
-View inventory levels
-View payments and revenue reports
-Receive AI-generated inventory alerts
-
-account_user (M)
-Can order from any store
-Suggested store based on:
-Current location + pickup time, or
-Preferred store
-Preferences and order history retained
-
-general_user (M)
-Can place one-time orders
-No data persistence
+- `admin`
+  - Can access their own store information only, with the same access level
+  - Has access to manage user account data
+  - Has ability to update/remove/unlock user accounts
+  - Has the ability to add manager accounts/grant permissions
+- `manager`
+  - Can access their own store information only, with the same access level
+  - Has access to data such as stock inventory
+  - Has access to user payments
+  - Has access to revenue reports
+- `account_user`
+  - Can access their own information from any store
+  - Software will suggest which location to buy from based on:
+    - the user's current location and preferred pickup time, or
+    - the uers's preferred location
+  - Software remembers previous orders and suggests new drinks based on preferences
+- `general_user`
+  - User can use the app to order drinks on a single time basis without creating an account
+  - This user's data and preferences aren't saved in the system
 
 ### Use Case Stories
 
